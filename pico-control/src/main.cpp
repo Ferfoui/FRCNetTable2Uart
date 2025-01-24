@@ -1,4 +1,5 @@
 #include <Arduino.h>
+#include "Lights.hpp"
 void setup() {
     SerialUSB.begin(9600, SERIAL_8N1);
 
