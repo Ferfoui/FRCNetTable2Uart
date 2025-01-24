@@ -1,21 +1,34 @@
+//
+// Created by Ferfoui on 23/01/2025.
+//
+
 #include <Arduino.h>
 #include "Lights.hpp"
-void setup() {
-    SerialUSB.begin(9600, SERIAL_8N1);
 
-    pinMode(LED_BUILTIN, OUTPUT);
-    digitalWrite(LED_BUILTIN, LOW);
+#define LEDS_GPIO {LED_BUILTIN}
+
+
+Lights lights(LEDS_GPIO);
+
+void setup()
+{
+    SerialUSB.begin(9600, SERIAL_8N1);
 }
 
-void loop() {
-    if (SerialUSB.available()) {
+void loop()
+{
+    if (SerialUSB.available())
+    {
         const String input = SerialUSB.readString();
         SerialUSB.println(input);
 
-        if (input.equals("H")) {
-            digitalWrite(LED_BUILTIN, HIGH);
-        } else if (input.equals("L")) {
-            digitalWrite(LED_BUILTIN, LOW);
+        if (input.equals("H"))
+        {
+            lights.setLedState(0, HIGH);
+        }
+        else if (input.equals("L"))
+        {
+            lights.setLedState(0, LOW);
         }
     }
 }
