@@ -9,4 +9,7 @@ void SerialCommunication::init(UART serial) {
     m_pSerial->begin(9600, SERIAL_8N1);
 }
 
+bool SerialCommunication::available() {
+    return m_pSerial->available();
+}
 

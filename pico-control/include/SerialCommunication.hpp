@@ -11,7 +11,7 @@ class SerialCommunication {
 public:
     explicit SerialCommunication();
     void init(UART serial);
-    void available();
+    bool available();
 
 private:
     UART* m_pSerial;
