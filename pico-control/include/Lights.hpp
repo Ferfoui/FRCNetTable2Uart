@@ -17,6 +17,8 @@ public:
     std::vector<bool> getLedsState() const;
     bool getLedState(int ledIndex);
 
+    void setAllLedsState(bool state);
+
 private:
     std::vector<int> mLedsGpio;
     std::vector<bool> mLedsState;

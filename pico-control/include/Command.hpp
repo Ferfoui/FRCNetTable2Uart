@@ -10,11 +10,13 @@
 
 #define SET_COMMAND "set"
 #define GET_COMMAND "get"
+#define RESET_COMMAND "reset"
 
 #define SET_COMMAND_ARGS 2
 #define GET_COMMAND_ARGS 1
+#define RESET_COMMAND_ARGS 0
 
-enum CommandType { set, get, unknown };
+enum CommandType { set, get, reset, unknown };
 
 class Command {
 public:

@@ -30,3 +30,9 @@ std::vector<bool> Lights::getLedsState() const {
 bool Lights::getLedState(int ledIndex) {
     return mLedsState[ledIndex];
 }
+
+void Lights::setAllLedsState(bool state) {
+    for (uint i = 0; i < mLedsGpio.size(); i++) {
+        setLedState(i, state);
+    }
+}

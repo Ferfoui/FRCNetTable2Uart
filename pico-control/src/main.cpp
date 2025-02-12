@@ -6,13 +6,14 @@
 #include "Lights.hpp"
 #include "Command.hpp"
 
+#define BAUD_RATE 115200
 #define LEDS_GPIO {LED_BUILTIN, 28, 27, 26, 22, 21, 20, 19, 18, 17, 16}
 
 Lights lights(LEDS_GPIO);
 
 void setup()
 {
-    SerialUSB.begin(9600, SERIAL_8N1);
+    SerialUSB.begin(BAUD_RATE, SERIAL_8N1);
 }
 
 void commandLogic(const Command& command)
@@ -27,6 +28,8 @@ void commandLogic(const Command& command)
     case get:
         SerialUSB.println(String(lights.getLedState(args.at(0).toInt())));
         break;
+    case reset:
+        lights.setAllLedsState(false);
     case unknown:
         break;
     }

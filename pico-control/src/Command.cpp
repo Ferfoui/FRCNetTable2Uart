@@ -37,6 +37,8 @@ bool checkArgsNumber(const int argsNumber, CommandType type) {
         return argsNumber == SET_COMMAND_ARGS;
     case get:
         return argsNumber == GET_COMMAND_ARGS;
+    case reset:
+        return argsNumber == RESET_COMMAND_ARGS;
     case unknown:
        	return false;
     }
@@ -48,6 +50,8 @@ Command parseCommand(const String& input) {
         type = set;
     } else if (input.startsWith(GET_COMMAND)) {
         type = get;
+    } else if (input.startsWith(RESET_COMMAND)) {
+        type = reset;
     } else {
         return Command(unknown, {});
     }
