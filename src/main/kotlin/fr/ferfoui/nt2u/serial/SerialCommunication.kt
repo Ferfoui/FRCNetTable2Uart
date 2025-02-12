@@ -2,10 +2,12 @@ package fr.ferfoui.nt2u.serial
 
 import com.fazecast.jSerialComm.SerialPort
 import java.io.IOException
+import kotlin.jvm.Throws
 
-class SerialCommunication(val port: SerialPort) : AutoCloseable {
+class SerialCommunication(val port: SerialPort, val baudRate: Int = 9600) : AutoCloseable {
 
-    fun open(baudRate: Int = 9600) {
+    @Throws(IOException::class)
+    fun open() {
         if (!port.openPort())
             throw IOException("Failed to open port")
 

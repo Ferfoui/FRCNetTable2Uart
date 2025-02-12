@@ -13,7 +13,7 @@ fun main() {
     var rpiPort: SerialPort? = null
 
     ports.forEach { port ->
-        println(port.systemPortName)
+        println("${port.systemPortName} : ${port.descriptivePortName}")
 
         if (port.systemPortName == "COM3") {
             rpiPort = port
@@ -21,17 +21,17 @@ fun main() {
     }
 
     if (rpiPort != null) {
-        serialCommunication = SerialCommunication(rpiPort)
+        serialCommunication = SerialCommunication(rpiPort, 115_200)
         serialCommunication.open()
 
         repeat(8) {
             println("Setting ON")
-            serialCommunication.write("H")
+            serialCommunication.write("set 0 1")
             runBlocking {
                 delay(1000)
             }
             println("Setting OFF")
-            serialCommunication.write("L")
+            serialCommunication.write("set 0 0")
             runBlocking {
                 delay(1000)
             }
