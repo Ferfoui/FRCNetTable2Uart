@@ -13,3 +13,12 @@ bool SerialCommunication::available() {
     return m_pSerial->available();
 }
 
+Command SerialCommunication::readCommand() {
+    const String input = m_pSerial->readString();
+    return parseCommand(input);
+}
+
+void SerialCommunication::send(String message) {
+    m_pSerial->println(message);
+}
+

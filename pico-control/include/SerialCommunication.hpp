@@ -6,12 +6,15 @@
 #define PICO_CONTROL_SERIALCOMMUNICATION_HPP
 
 #include "Arduino.h"
+#include "Command.hpp"
 
 class SerialCommunication {
 public:
     explicit SerialCommunication();
     void init(UART serial);
     bool available();
+    Command readCommand();
+    void send(String message);
 
 private:
     UART* m_pSerial;

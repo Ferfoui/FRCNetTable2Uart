@@ -5,6 +5,7 @@
 #include <Arduino.h>
 #include "SerialCommunication.hpp"
 #include "Lights.hpp"
+#include "Command.hpp"
 
 #define LEDS_GPIO {LED_BUILTIN, 28, 27, 26, 22, 21, 20, 19, 18, 17, 16}
 
@@ -18,18 +19,38 @@ void setup()
 
 void loop()
 {
-    if (SerialUSB.available())
+    if (serial.available())
     {
-        const String input = SerialUSB.readString();
-        SerialUSB.println(input);
+        const Command command = serial.readCommand();
 
-        if (input.equals("H"))
+        if (command.getType() == unknown)
         {
-            lights.setLedState(0, HIGH);
+            return;
         }
-        else if (input.equals("L"))
+
+        const std::vector<String> args = command.getArgs();
+
+        if (command.getType() == set)
         {
-            lights.setLedState(0, LOW);
+            if (args.size() != 2)
+                return;
+
+            const int led = args[0].toInt();
+            const int state = args[1].toInt();
+
+            lights.setLedState(led, state);
+        }
+        else if (command.getType() == get)
+        {
+            if (args.size() != 1)
+            {
+                return;
+            }
+
+            const int led = args[0].toInt();
+            const int state = lights.getLedsState().at(led);
+
+            SerialUSB.println(state);
         }
     }
 }
