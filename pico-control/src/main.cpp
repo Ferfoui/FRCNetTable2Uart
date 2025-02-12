@@ -6,14 +6,14 @@
 #include "SerialCommunication.hpp"
 #include "Lights.hpp"
 
-#define LEDS_GPIO {LED_BUILTIN}
+#define LEDS_GPIO {LED_BUILTIN, 28, 27, 26, 22, 21, 20, 19, 18, 17, 16}
 
-SerialCommunication serial();
+SerialCommunication serial;
 Lights lights(LEDS_GPIO);
 
 void setup()
 {
-    serial.init();
+    serial.init(SerialUSB);
 }
 
 void loop()
