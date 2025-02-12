@@ -1,0 +1,7 @@
+[versions]
+coroutines = "1.10.1"
+jSerialComm = "[2.0.0,3.0.0)"
+
+[libraries]
+kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+jSerialComm = { group = "com.fazecast", name = "jSerialComm", version.ref = "jSerialComm" }
