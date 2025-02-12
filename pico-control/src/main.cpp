@@ -3,16 +3,17 @@
 //
 
 #include <Arduino.h>
+#include "SerialCommunication.hpp"
 #include "Lights.hpp"
 
 #define LEDS_GPIO {LED_BUILTIN}
 
-
+SerialCommunication serial();
 Lights lights(LEDS_GPIO);
 
 void setup()
 {
-    SerialUSB.begin(9600, SERIAL_8N1);
+    serial.init();
 }
 
 void loop()
