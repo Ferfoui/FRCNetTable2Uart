@@ -31,11 +31,22 @@ std::vector<String> split(const String& str) {
     return result;
 }
 
+bool checkArgsNumber(const int argsNumber, CommandType type) {
+  	switch (type) {
+    case set:
+        return argsNumber == SET_COMMAND_ARGS;
+    case get:
+        return argsNumber == GET_COMMAND_ARGS;
+    case unknown:
+       	return false;
+    }
+}
+
 Command parseCommand(const String& input) {
     CommandType type = unknown;
-    if (input.startsWith("set")) {
+    if (input.startsWith(SET_COMMAND)) {
         type = set;
-    } else if (input.startsWith("get")) {
+    } else if (input.startsWith(GET_COMMAND)) {
         type = get;
     } else {
         return Command(unknown, {});
@@ -44,5 +55,8 @@ Command parseCommand(const String& input) {
     std::vector<String> args = split(input);
     args.erase(args.begin());
 
+    if (!checkArgsNumber(args.size(), type)) {
+        return Command(unknown, {});
+    }
     return Command(type, args);
 }

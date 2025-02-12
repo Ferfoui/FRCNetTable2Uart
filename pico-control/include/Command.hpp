@@ -8,6 +8,12 @@
 #include <Arduino.h>
 #include <vector>
 
+#define SET_COMMAND "set"
+#define GET_COMMAND "get"
+
+#define SET_COMMAND_ARGS 2
+#define GET_COMMAND_ARGS 1
+
 enum CommandType { set, get, unknown };
 
 class Command {

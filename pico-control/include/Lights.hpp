@@ -15,6 +15,7 @@ public:
     void setLedState(int ledIndex, bool state);
     void toggleLedState(int ledIndex);
     std::vector<bool> getLedsState() const;
+    bool getLedState(int ledIndex);
 
 private:
     std::vector<int> mLedsGpio;

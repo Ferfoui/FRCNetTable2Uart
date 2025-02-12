@@ -26,3 +26,7 @@ void Lights::toggleLedState(int ledIndex) {
 std::vector<bool> Lights::getLedsState() const {
     return mLedsState;
 }
+
+bool Lights::getLedState(int ledIndex) {
+    return mLedsState[ledIndex];
+}
