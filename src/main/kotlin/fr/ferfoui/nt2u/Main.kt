@@ -1,8 +1,7 @@
 package fr.ferfoui.nt2u
 
 import com.fazecast.jSerialComm.SerialPort
-import edu.wpi.first.networktables.NetworkTableInstance
-import fr.ferfoui.nt2u.leds.LedManager
+import fr.ferfoui.nt2u.led.LedManager
 import fr.ferfoui.nt2u.serial.SerialCommunication
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking

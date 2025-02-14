@@ -1,4 +1,4 @@
-package fr.ferfoui.nt2u.leds
+package fr.ferfoui.nt2u.led
 
 import fr.ferfoui.nt2u.serial.SerialCommunication
 import fr.ferfoui.nt2u.serial.resetLedsCommand
