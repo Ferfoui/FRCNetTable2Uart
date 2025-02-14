@@ -4,7 +4,7 @@ import com.fazecast.jSerialComm.SerialPort
 import java.io.IOException
 import kotlin.jvm.Throws
 
-class SerialCommunication(val port: SerialPort, val baudRate: Int = 9600) : AutoCloseable {
+class SerialCommunication(private val port: SerialPort, private val baudRate: Int = 9600) : AutoCloseable {
 
     @Throws(IOException::class)
     fun open() {

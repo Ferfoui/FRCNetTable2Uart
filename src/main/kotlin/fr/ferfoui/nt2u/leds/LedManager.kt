@@ -4,13 +4,13 @@ import fr.ferfoui.nt2u.serial.SerialCommunication
 import fr.ferfoui.nt2u.serial.resetLedsCommand
 import fr.ferfoui.nt2u.serial.setLedStateCommand
 
-class LedManager(val serial: SerialCommunication, ledCount: Int) {
+class LedManager(private val serial: SerialCommunication, ledCount: Int) {
     init {
         serial.open()
         serial.write(resetLedsCommand())
     }
 
-    val leds = (1..ledCount).associate { it to false }.toMutableMap()
+    private val leds = (0..ledCount).associateWith { false }.toMutableMap()
 
     fun setLedState(ledId: Int, state: Boolean) {
         serial.write(setLedStateCommand(ledId, state))
