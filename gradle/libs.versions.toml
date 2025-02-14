@@ -1,7 +1,11 @@
 [versions]
+kotlin = "2.1.0"
 coroutines = "1.10.1"
-jSerialComm = "[2.0.0,3.0.0)"
+jserialcomm = "[2.0.0,3.0.0)"
+gradle-rio = "2025.1.1"
+wpilib-tools = "2.1.0"
 
 [libraries]
 kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
-jSerialComm = { group = "com.fazecast", name = "jSerialComm", version.ref = "jSerialComm" }
+jserialcomm = { group = "com.fazecast", name = "jSerialComm", version.ref = "jserialcomm" }
+
