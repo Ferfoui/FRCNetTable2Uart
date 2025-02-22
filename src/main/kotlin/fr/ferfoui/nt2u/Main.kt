@@ -27,7 +27,7 @@ fun main() {
         val ledManager = LedManager(serialCommunication, 11)
 
         runBlocking {
-            delay(10000)
+            delay(7000)
         }
         println("Setting ON")
         ledManager.setLedState(1, true)

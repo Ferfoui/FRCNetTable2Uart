@@ -15,8 +15,12 @@ Lights::Lights(std::vector<int> ledsGpio) {
 }
 
 void Lights::setLedState(int ledIndex, bool state) {
+  	mLedsState[ledIndex] = state;
+  	// Led L2 is inverted because it is connected to a NPN transistor
+    if (ledIndex == 2) {
+        state = !state;
+    }
     digitalWrite(mLedsGpio[ledIndex], state);
-    mLedsState[ledIndex] = state;
 }
 
 void Lights::toggleLedState(int ledIndex) {
