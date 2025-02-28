@@ -14,6 +14,7 @@ Lights lights(LEDS_GPIO);
 void setup()
 {
     SerialUSB.begin(BAUD_RATE, SERIAL_8N1);
+    lights.setLedState(1, true);
 }
 
 void commandLogic(const Command& command)

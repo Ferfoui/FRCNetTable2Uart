@@ -1,6 +1,8 @@
 package fr.ferfoui.nt2u.serial
 
 import com.fazecast.jSerialComm.SerialPort
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import kotlin.jvm.Throws
 
@@ -12,8 +14,11 @@ class SerialCommunication(private val port: SerialPort, private val baudRate: In
             throw IOException("Failed to open port")
 
         port.setBaudRate(baudRate)
+        runBlocking {
+            delay(5000)
+        }
         //TODO: Check if it is the correct method to make the board read all incoming data
-        port.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 2000)
+        //port.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 2000)
     }
 
     override fun close() {
