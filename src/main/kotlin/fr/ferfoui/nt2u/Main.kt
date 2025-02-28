@@ -33,6 +33,8 @@ fun main() {
         //ledManager.setLedState(4, true)
 
         testAllLeds(ledManager)
+
+        ledManager.stop()
     }
 
     //NetworkTableInstance.getDefault()

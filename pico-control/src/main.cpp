@@ -31,6 +31,7 @@ void commandLogic(const Command& command)
         break;
     case reset:
         lights.setAllLedsState(false);
+        lights.setLedState(1, true);
     case unknown:
         break;
     }
