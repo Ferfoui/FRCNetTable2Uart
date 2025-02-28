@@ -3,8 +3,10 @@ package fr.ferfoui.nt2u.led
 import fr.ferfoui.nt2u.serial.SerialCommunication
 import fr.ferfoui.nt2u.serial.resetLedsCommand
 import fr.ferfoui.nt2u.serial.setLedStateCommand
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
-class LedManager(private val serial: SerialCommunication, ledCount: Int) {
+class LedManager(private val serial: SerialCommunication, val ledCount: Int) {
     init {
         serial.open()
         serial.write(resetLedsCommand())
@@ -20,5 +22,20 @@ class LedManager(private val serial: SerialCommunication, ledCount: Int) {
     fun stop() {
         serial.write(resetLedsCommand())
         serial.close()
+    }
+}
+
+fun testAllLeds(ledManager: LedManager) {
+    repeat(ledManager.ledCount + 1) {
+        println("Setting $it ON")
+        ledManager.setLedState(it, true)
+        runBlocking {
+            delay(1000)
+        }
+        println("Setting $it OFF")
+        ledManager.setLedState(it, false)
+        runBlocking {
+            delay(1000)
+        }
     }
 }

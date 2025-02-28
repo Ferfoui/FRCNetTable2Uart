@@ -2,6 +2,7 @@ package fr.ferfoui.nt2u
 
 import com.fazecast.jSerialComm.SerialPort
 import fr.ferfoui.nt2u.led.LedManager
+import fr.ferfoui.nt2u.led.testAllLeds
 import fr.ferfoui.nt2u.serial.SerialCommunication
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -39,19 +40,4 @@ fun main() {
 
     //NetworkTableInstance.getDefault()
 
-}
-
-fun testAllLeds(ledManager: LedManager) {
-    repeat(11) {
-        println("Setting $it ON")
-        ledManager.setLedState(it, true)
-        runBlocking {
-            delay(1000)
-        }
-        println("Setting $it OFF")
-        ledManager.setLedState(it, false)
-        runBlocking {
-            delay(1000)
-        }
-    }
 }
