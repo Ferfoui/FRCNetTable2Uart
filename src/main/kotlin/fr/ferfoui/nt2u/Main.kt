@@ -3,12 +3,17 @@ package fr.ferfoui.nt2u
 import com.fazecast.jSerialComm.SerialPort
 import fr.ferfoui.nt2u.led.LedManager
 import fr.ferfoui.nt2u.led.testAllLeds
+import fr.ferfoui.nt2u.networktable.DashboardAccessor
 import fr.ferfoui.nt2u.serial.SerialCommunication
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
 fun main() {
 
+    dashboardTest()
+}
+
+fun ledsTest() {
     val ports = SerialPort.getCommPorts()
 
     val serialCommunication: SerialCommunication
@@ -37,7 +42,10 @@ fun main() {
 
         ledManager.stop()
     }
+}
 
-    //NetworkTableInstance.getDefault()
+fun dashboardTest() {
+    val smartDashboard = DashboardAccessor()
 
+    smartDashboard.printKeys()
 }
