@@ -16,7 +16,7 @@ fun main() {
     ports.forEach { port ->
         println("${port.systemPortName} : ${port.descriptivePortName}")
 
-        if (port.systemPortName == "COM3") {
+        if (port.systemPortName == "COM4") {
             rpiPort = port
         }
     }
@@ -29,23 +29,27 @@ fun main() {
         runBlocking {
             delay(7000)
         }
-        println("Setting ON")
-        ledManager.setLedState(1, true)
+        //println("Setting ON")
+        //ledManager.setLedState(4, true)
 
-        /*repeat(8) {
-            println("Setting ON")
-            ledManager.setLedState(1, true)
-            runBlocking {
-                delay(1000)
-            }
-            println("Setting OFF")
-            ledManager.setLedState(1, false)
-            runBlocking {
-                delay(1000)
-            }
-        }*/
+        testAllLeds(ledManager)
     }
 
     //NetworkTableInstance.getDefault()
 
+}
+
+fun testAllLeds(ledManager: LedManager) {
+    repeat(11) {
+        println("Setting $it ON")
+        ledManager.setLedState(it, true)
+        runBlocking {
+            delay(1000)
+        }
+        println("Setting $it OFF")
+        ledManager.setLedState(it, false)
+        runBlocking {
+            delay(1000)
+        }
+    }
 }
