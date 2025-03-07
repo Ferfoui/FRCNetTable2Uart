@@ -2,15 +2,14 @@ package fr.ferfoui.nt2u
 
 import com.fazecast.jSerialComm.SerialPort
 import fr.ferfoui.nt2u.led.LedManager
+import fr.ferfoui.nt2u.led.simultaneousTest
 import fr.ferfoui.nt2u.led.testAllLeds
 import fr.ferfoui.nt2u.networktable.DashboardAccessor
 import fr.ferfoui.nt2u.serial.SerialCommunication
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 
 fun main() {
 
-    dashboardTest()
+    ledsTest()
 }
 
 fun ledsTest() {
@@ -32,14 +31,11 @@ fun ledsTest() {
 
         val ledManager = LedManager(serialCommunication, 11)
 
-        runBlocking {
-            delay(7000)
-        }
         //println("Setting ON")
         //ledManager.setLedState(4, true)
 
         testAllLeds(ledManager)
-
+        simultaneousTest(ledManager)
         ledManager.stop()
     }
 }

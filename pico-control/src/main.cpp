@@ -41,7 +41,7 @@ void loop()
 {
     if (SerialUSB.available())
     {
-        const String input = SerialUSB.readString();
+        const String input = SerialUSB.readStringUntil('\n');
         const Command command = parseCommand(input);
 
         commandLogic(command);

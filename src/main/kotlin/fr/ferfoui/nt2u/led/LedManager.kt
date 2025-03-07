@@ -26,16 +26,30 @@ class LedManager(private val serial: SerialCommunication, val ledCount: Int) {
 }
 
 fun testAllLeds(ledManager: LedManager) {
-    repeat(ledManager.ledCount + 1) {
+    repeat(ledManager.ledCount) {
         println("Setting $it ON")
         ledManager.setLedState(it, true)
         runBlocking {
-            delay(1000)
+            delay(500)
         }
         println("Setting $it OFF")
         ledManager.setLedState(it, false)
         runBlocking {
-            delay(1000)
+            delay(500)
         }
+    }
+}
+
+fun simultaneousTest(ledManager: LedManager) {
+    repeat(ledManager.ledCount) {
+        println("Setting $it ON")
+        ledManager.setLedState(it, true)
+    }
+    runBlocking {
+        delay(1000)
+    }
+    repeat(ledManager.ledCount) {
+        println("Setting $it OFF")
+        ledManager.setLedState(it, false)
     }
 }
