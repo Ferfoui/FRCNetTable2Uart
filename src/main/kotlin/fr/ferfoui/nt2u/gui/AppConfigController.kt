@@ -2,21 +2,26 @@ package fr.ferfoui.nt2u.gui
 
 import com.fazecast.jSerialComm.SerialPort
 import fr.ferfoui.nt2u.ApplicationConfigurationService
+import fr.ferfoui.nt2u.model.LedConfig
 import fr.ferfoui.nt2u.serial.SerialCommunication
+import fr.ferfoui.nt2u.serial.getAvailableBaudRates
 import fr.ferfoui.nt2u.serial.getAvailableComPorts
 import javafx.application.Platform
 import javafx.beans.property.SimpleBooleanProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
+import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.scene.control.*
+import javafx.scene.control.cell.ComboBoxTableCell
+import javafx.scene.control.cell.PropertyValueFactory
+import javafx.scene.control.cell.TextFieldTableCell
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
 import javafx.stage.Stage
-import java.util.*
 
 class AppConfigController {
-    
+
     @FXML private lateinit var comPortComboBox: ComboBox<String>
     @FXML private lateinit var baudRateComboBox: ComboBox<Int>
     @FXML private lateinit var connectionStatusCircle: Circle
@@ -25,8 +30,13 @@ class AppConfigController {
     @FXML private lateinit var disconnectButton: Button
     @FXML private lateinit var saveButton: Button
     @FXML private lateinit var cancelButton: Button
-    @FXML private lateinit var tableNameTextField: TextField
     @FXML private lateinit var autoConnectCheckBox: CheckBox
+    @FXML private lateinit var ledTableView: TableView<LedConfig>
+    @FXML private lateinit var ledNumberColumn: TableColumn<LedConfig, Int>
+    @FXML private lateinit var topicColumn: TableColumn<LedConfig, String>
+    @FXML private lateinit var valueTypeColumn: TableColumn<LedConfig, LedConfig.ValueType>
+
+    private val ledConfigs: ObservableList<LedConfig> = FXCollections.observableArrayList()
 
     private val configService = ApplicationConfigurationService()
     
@@ -40,13 +50,16 @@ class AppConfigController {
         // Initialize ComboBoxes
         refreshComPorts()
         baudRateComboBox.items = FXCollections.observableArrayList(
-            listOf(9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600)
+            getAvailableBaudRates()
         )
         baudRateComboBox.selectionModel.select(4) // Default to 115200
-        
+
+        // Initialize LED table
+        initializeLedTable()
+
         // Bind connection status to UI
         connectionStatusLabel.textProperty().bind(statusText)
-        
+
         isConnected.addListener { _, _, newValue ->
             if (newValue) {
                 connectionStatusCircle.fill = Color.GREEN
@@ -60,12 +73,45 @@ class AppConfigController {
                 disconnectButton.isDisable = true
             }
         }
-        
+
         // Initialize buttons state
         disconnectButton.isDisable = true
-        
+
         // Load saved configuration
         loadConfiguration()
+    }
+
+    private fun initializeLedTable() {
+        // Set up the columns
+        ledNumberColumn.cellValueFactory = PropertyValueFactory("ledNumber")
+
+        topicColumn.cellValueFactory = PropertyValueFactory("networkTableTopic")
+        topicColumn.cellFactory = TextFieldTableCell.forTableColumn()
+        topicColumn.setOnEditCommit { event ->
+            val ledConfig = event.rowValue
+            ledConfig.networkTableTopic = event.newValue
+        }
+
+        valueTypeColumn.cellValueFactory = PropertyValueFactory("valueType")
+        valueTypeColumn.cellFactory = ComboBoxTableCell.forTableColumn(
+            FXCollections.observableArrayList(*LedConfig.ValueType.entries.toTypedArray())
+        )
+        valueTypeColumn.setOnEditCommit { event ->
+            val ledConfig = event.rowValue
+            ledConfig.valueType = event.newValue
+        }
+
+        // Make the table editable
+        ledTableView.isEditable = true
+        ledTableView.items = ledConfigs
+
+        // Load LED configurations
+        loadLedConfigurations()
+    }
+
+    private fun loadLedConfigurations() {
+        ledConfigs.clear()
+        ledConfigs.addAll(configService.loadLedConfigurations())
     }
     
     @FXML
@@ -102,18 +148,21 @@ class AppConfigController {
     
     @FXML
     fun onSave() {
-        val config = mapOf(
-            "comPort" to (comPortComboBox.value ?: ""),
-            "baudRate" to (baudRateComboBox.value?.toString() ?: "115200"),
-            "tableName" to tableNameTextField.text,
-            "autoConnect" to autoConnectCheckBox.isSelected.toString()
-        )
-        
-        try {
-            configService.saveConfiguration(config)
-            closeWindow()
-        } catch (e: Exception) {
-            showErrorAlert("Save Error", "Failed to save configuration", e.message ?: "Unknown error")
+        @FXML
+        fun onSave() {
+            val config = mapOf(
+                "comPort" to (comPortComboBox.value ?: ""),
+                "baudRate" to (baudRateComboBox.value?.toString() ?: "115200"),
+                "autoConnect" to autoConnectCheckBox.isSelected.toString()
+            )
+
+            try {
+                configService.saveConfiguration(config)
+                configService.saveLedConfigurations(ledConfigs)
+                closeWindow()
+            } catch (e: Exception) {
+                showErrorAlert("Save Error", "Failed to save configuration", e.message ?: "Unknown error")
+            }
         }
     }
     
@@ -129,18 +178,18 @@ class AppConfigController {
             comPortComboBox.selectionModel.selectFirst()
         }
     }
-    
+
     private fun loadConfiguration() {
         try {
             val config = configService.loadConfiguration()
-            
+
             // Apply loaded configuration to UI
             config["comPort"]?.let { port ->
                 if (comPortComboBox.items.contains(port)) {
                     comPortComboBox.value = port
                 }
             }
-            
+
             config["baudRate"]?.let { baudRate ->
                 baudRate.toIntOrNull()?.let { rate ->
                     if (baudRateComboBox.items.contains(rate)) {
@@ -148,14 +197,10 @@ class AppConfigController {
                     }
                 }
             }
-            
-            config["tableName"]?.let { tableName ->
-                tableNameTextField.text = tableName
-            }
-            
+
             config["autoConnect"]?.let { autoConnect ->
                 autoConnectCheckBox.isSelected = autoConnect.toBoolean()
-                
+
                 // Auto-connect if enabled
                 if (autoConnectCheckBox.isSelected && comPortComboBox.value != null) {
                     Platform.runLater { onConnect() }

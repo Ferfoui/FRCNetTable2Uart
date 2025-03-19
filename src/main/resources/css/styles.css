@@ -79,3 +79,39 @@
   -fx-stroke-width: 1px;
 }
 
+/* Add these styles for the TableView */
+.table-view {
+  -fx-background-color: white;
+  -fx-border-color: #d0d0d0;
+  -fx-border-radius: 3px;
+}
+
+.table-view .column-header {
+  -fx-background-color: #f0f0f0;
+  -fx-border-color: #d0d0d0;
+  -fx-border-width: 0 0 1 0;
+  -fx-padding: 5px;
+}
+
+.table-view .table-cell {
+  -fx-padding: 5px;
+  -fx-alignment: center-left;
+}
+
+.table-view .table-row-cell:odd {
+  -fx-background-color: #f9f9f9;
+}
+
+.table-view .table-row-cell:selected {
+  -fx-background-color: #d0e5f5;
+}
+
+.table-view .table-row-cell:selected .table-cell {
+  -fx-text-fill: black;
+}
+
+/* Adjust the window size to accommodate the table */
+.config-window {
+  -fx-pref-height: 500px;
+}
+
