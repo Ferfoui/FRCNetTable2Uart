@@ -56,6 +56,10 @@ javafx {
     modules = listOf("javafx.controls", "javafx.fxml")
 }
 
+application {
+    mainClass.set("fr.ferfoui.nt2u.gui.NetworkTables2UartApp")
+}
+
 tasks.test {
     useJUnitPlatform()
 }

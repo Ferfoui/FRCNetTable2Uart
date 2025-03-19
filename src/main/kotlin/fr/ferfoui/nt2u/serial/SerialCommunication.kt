@@ -14,8 +14,6 @@ class SerialCommunication(private val port: SerialPort, private val baudRate: In
             throw IOException("Failed to open port")
 
         port.setBaudRate(baudRate)
-        //TODO: Check if it is the correct method to make the board read all incoming data
-        //port.setComPortTimeouts(SerialPort.TIMEOUT_WRITE_BLOCKING, 0, 2000)
     }
 
     override fun close() {
@@ -36,3 +34,9 @@ class SerialCommunication(private val port: SerialPort, private val baudRate: In
         return String(buffer, 0, bytesRead)
     }
 }
+
+fun getAvailableComPorts() =
+    SerialPort.getCommPorts().map { it.systemPortName }
+
+fun getAvailableBaudRates() =
+    listOf(9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600)

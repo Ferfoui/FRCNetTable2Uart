@@ -1,0 +1,81 @@
+/* Base Styles */
+.root {
+  -fx-font-family: "Segoe UI", Arial, sans-serif;
+  -fx-font-size: 12px;
+  -fx-background-color: #f5f5f5;
+}
+
+/* Header Styles */
+.header {
+  -fx-background-color: #3498db;
+  -fx-padding: 15px;
+}
+
+.title-label {
+  -fx-text-fill: white;
+  -fx-font-size: 18px;
+  -fx-font-weight: bold;
+}
+
+/* Content Styles */
+.content-grid {
+  -fx-background-color: white;
+  -fx-background-radius: 5px;
+  -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0, 0, 5);
+}
+
+/* Footer Styles */
+.footer {
+  -fx-background-color: #f0f0f0;
+  -fx-border-color: #e0e0e0;
+  -fx-border-width: 1px 0 0 0;
+}
+
+/* Button Styles */
+.button {
+  -fx-background-color: #f0f0f0;
+  -fx-background-radius: 3px;
+  -fx-border-color: #d0d0d0;
+  -fx-border-radius: 3px;
+  -fx-padding: 5px 10px;
+  -fx-cursor: hand;
+}
+
+.button:hover {
+  -fx-background-color: #e0e0e0;
+}
+
+.primary-button {
+  -fx-background-color: #3498db;
+  -fx-text-fill: white;
+  -fx-border-color: #2980b9;
+}
+
+.primary-button:hover {
+  -fx-background-color: #2980b9;
+}
+
+.action-button {
+  -fx-min-width: 100px;
+}
+
+/* Form Control Styles */
+.combo-box,
+.text-field {
+  -fx-background-color: white;
+  -fx-border-color: #d0d0d0;
+  -fx-border-radius: 3px;
+  -fx-padding: 5px;
+}
+
+.combo-box:focused,
+.text-field:focused {
+  -fx-border-color: #3498db;
+}
+
+/* Status Indicator */
+#connectionStatusCircle {
+  -fx-stroke: #d0d0d0;
+  -fx-stroke-width: 1px;
+}
+
