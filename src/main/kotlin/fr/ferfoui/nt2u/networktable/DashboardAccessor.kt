@@ -15,6 +15,11 @@ class DashboardAccessor {
     }
 
     fun printKeys() {
+        if (smartDashboardTable.keys.isEmpty()) {
+            println("No keys found")
+            return
+        }
+
         smartDashboardTable.keys.forEach {
             println(it)
         }

@@ -9,7 +9,11 @@
 #define BAUD_RATE 115200
 #define LEDS_GPIO {LED_BUILTIN, 28, 27, 26, 22, 21, 20, 19, 18, 17, 16}
 
+#define BLINK_DELAY 200000
+
 Lights lights(LEDS_GPIO);
+
+int cycle = 0;
 
 void setup()
 {
@@ -31,7 +35,7 @@ void commandLogic(const Command& command)
         break;
     case reset:
         lights.setAllLedsState(false);
-        lights.setLedState(1, true);
+        break;
     case unknown:
         break;
     }
@@ -46,4 +50,12 @@ void loop()
 
         commandLogic(command);
     }
+
+    if (cycle == BLINK_DELAY)
+    {
+        lights.toggleLedState(1);
+        cycle = 0;
+    }
+
+    cycle++;
 }

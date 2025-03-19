@@ -8,8 +8,8 @@ import fr.ferfoui.nt2u.networktable.DashboardAccessor
 import fr.ferfoui.nt2u.serial.SerialCommunication
 
 fun main() {
-
-    ledsTest()
+    dashboardTest()
+    //ledsTest()
 }
 
 fun ledsTest() {
