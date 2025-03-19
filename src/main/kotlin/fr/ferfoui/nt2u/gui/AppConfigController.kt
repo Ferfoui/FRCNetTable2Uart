@@ -39,12 +39,12 @@ class AppConfigController {
     private val ledConfigs: ObservableList<LedConfig> = FXCollections.observableArrayList()
 
     private val configService = ApplicationConfigurationService()
-    
+
     private val isConnected = SimpleBooleanProperty(false)
     private val statusText = SimpleStringProperty("Not Connected")
 
     private lateinit var serialCommunication: SerialCommunication
-    
+
     @FXML
     fun initialize() {
         // Initialize ComboBoxes
@@ -113,17 +113,17 @@ class AppConfigController {
         ledConfigs.clear()
         ledConfigs.addAll(configService.loadLedConfigurations())
     }
-    
+
     @FXML
     fun onRefreshComPorts() {
         refreshComPorts()
     }
-    
+
     @FXML
     fun onConnect() {
         val selectedPort = comPortComboBox.value
         val baudRate = baudRateComboBox.value
-        
+
         if (selectedPort != null && baudRate != null) {
             try {
                 serialCommunication = SerialCommunication(SerialPort.getCommPort(selectedPort), baudRate)
@@ -135,7 +135,7 @@ class AppConfigController {
             showErrorAlert("Connection Error", "Invalid Configuration", "Please select a COM port and baud rate.")
         }
     }
-    
+
     @FXML
     fun onDisconnect() {
         try {
@@ -145,32 +145,28 @@ class AppConfigController {
             showErrorAlert("Disconnection Error", "Failed to disconnect", e.message ?: "Unknown error")
         }
     }
-    
+
     @FXML
     fun onSave() {
-        @FXML
-        fun onSave() {
-            val config = mapOf(
-                "comPort" to (comPortComboBox.value ?: ""),
-                "baudRate" to (baudRateComboBox.value?.toString() ?: "115200"),
-                "autoConnect" to autoConnectCheckBox.isSelected.toString()
-            )
+        val config = mapOf(
+            "comPort" to (comPortComboBox.value ?: ""),
+            "baudRate" to (baudRateComboBox.value?.toString() ?: "115200"),
+            "autoConnect" to autoConnectCheckBox.isSelected.toString()
+        )
 
-            try {
-                configService.saveConfiguration(config)
-                configService.saveLedConfigurations(ledConfigs)
-                closeWindow()
-            } catch (e: Exception) {
-                showErrorAlert("Save Error", "Failed to save configuration", e.message ?: "Unknown error")
-            }
+        try {
+            configService.saveConfiguration(config)
+            configService.saveLedConfigurations(ledConfigs)
+        } catch (e: Exception) {
+            showErrorAlert("Save Error", "Failed to save configuration", e.message ?: "Unknown error")
         }
     }
-    
+
     @FXML
     fun onCancel() {
         closeWindow()
     }
-    
+
     private fun refreshComPorts() {
         val ports = getAvailableComPorts()
         comPortComboBox.items = FXCollections.observableArrayList(ports)
@@ -211,7 +207,7 @@ class AppConfigController {
             println("Failed to load configuration: ${e.message}")
         }
     }
-    
+
     private fun showErrorAlert(title: String, header: String, content: String) {
         val alert = Alert(Alert.AlertType.ERROR)
         alert.title = title
@@ -219,7 +215,7 @@ class AppConfigController {
         alert.contentText = content
         alert.showAndWait()
     }
-    
+
     private fun closeWindow() {
         val stage = saveButton.scene.window as Stage
         stage.close()
