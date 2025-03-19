@@ -2,8 +2,10 @@ import edu.wpi.first.tools.WpilibToolsExtension
 
 plugins {
     kotlin("jvm") version libs.versions.kotlin
-    id("edu.wpi.first.GradleRIO") version libs.versions.gradle.rio
-    id("edu.wpi.first.WpilibTools") version libs.versions.wpilib.tools
+    id("application")
+    alias(libs.plugins.gradle.shadow)
+    alias(libs.plugins.gradle.rio)
+    alias(libs.plugins.wpilib.tools)
 }
 
 group = "fr.ferfoui.nt2u"
