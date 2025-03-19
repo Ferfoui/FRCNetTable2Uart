@@ -6,6 +6,8 @@ import fr.ferfoui.nt2u.led.simultaneousTest
 import fr.ferfoui.nt2u.led.testAllLeds
 import fr.ferfoui.nt2u.networktable.DashboardAccessor
 import fr.ferfoui.nt2u.serial.SerialCommunication
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 fun main() {
     dashboardTest()
@@ -43,5 +45,10 @@ fun ledsTest() {
 fun dashboardTest() {
     val smartDashboard = DashboardAccessor()
 
-    smartDashboard.printKeys()
+    smartDashboard.subscribeTest()
+
+    runBlocking {
+        delay(3000)
+    }
+
 }
