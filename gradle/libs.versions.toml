@@ -5,6 +5,7 @@ jserialcomm = "[2.0.0,3.0.0)"
 gradle-rio = "2025.1.1"
 wpilib-tools = "2.1.0"
 gradle-shadow = "8.3.5"
+javafx-plugin = "0.1.0"
 
 [libraries]
 kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -14,3 +15,4 @@ jserialcomm = { group = "com.fazecast", name = "jSerialComm", version.ref = "jse
 gradle-rio = { id = "edu.wpi.first.GradleRIO", version.ref = "gradle-rio" }
 wpilib-tools = { id = "edu.wpi.first.WpilibTools", version.ref = "wpilib-tools" }
 gradle-shadow = { id = "com.gradleup.shadow", version.ref = "gradle-shadow" }
+javafx = { id = "org.openjfx.javafxplugin", version.ref = "javafx-plugin" }

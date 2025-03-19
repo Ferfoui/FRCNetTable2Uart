@@ -2,10 +2,11 @@ import edu.wpi.first.tools.WpilibToolsExtension
 
 plugins {
     kotlin("jvm") version libs.versions.kotlin
-    id("application")
+    application
     alias(libs.plugins.gradle.shadow)
     alias(libs.plugins.gradle.rio)
     alias(libs.plugins.wpilib.tools)
+    alias(libs.plugins.javafx)
 }
 
 group = "fr.ferfoui.nt2u"
@@ -48,6 +49,11 @@ dependencies {
     implementation("org.ejml:ejml-simple:${wpi.versions.ejmlVersion.get()}")
     implementation("us.hebi.quickbuf:quickbuf-runtime:${wpi.versions.quickbufVersion.get()}")
 
+}
+
+javafx {
+    version = "17.0.2"
+    modules = listOf("javafx.controls", "javafx.fxml")
 }
 
 tasks.test {
