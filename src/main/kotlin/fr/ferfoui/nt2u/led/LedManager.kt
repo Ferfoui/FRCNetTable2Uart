@@ -8,7 +8,6 @@ import kotlinx.coroutines.runBlocking
 
 class LedManager(private val serial: SerialCommunication, val ledCount: Int) {
     init {
-        serial.open()
         serial.write(resetLedsCommand())
     }
 

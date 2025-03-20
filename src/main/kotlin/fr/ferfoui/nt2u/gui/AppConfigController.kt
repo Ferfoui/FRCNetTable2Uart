@@ -1,7 +1,9 @@
 package fr.ferfoui.nt2u.gui
 
 import com.fazecast.jSerialComm.SerialPort
-import fr.ferfoui.nt2u.ApplicationConfigurationService
+import fr.ferfoui.nt2u.app.ApplicationConfigurationService
+import fr.ferfoui.nt2u.led.LedManager
+import fr.ferfoui.nt2u.led.LedsControl
 import fr.ferfoui.nt2u.model.LedConfig
 import fr.ferfoui.nt2u.serial.SerialCommunication
 import fr.ferfoui.nt2u.serial.getAvailableBaudRates
@@ -43,7 +45,8 @@ class AppConfigController {
     private val isConnected = SimpleBooleanProperty(false)
     private val statusText = SimpleStringProperty("Not Connected")
 
-    private lateinit var serialCommunication: SerialCommunication
+    private val serialCommunication = SerialCommunication()
+    private lateinit var ledsControl: LedsControl
 
     @FXML
     fun initialize() {
@@ -126,8 +129,10 @@ class AppConfigController {
 
         if (selectedPort != null && baudRate != null) {
             try {
-                serialCommunication = SerialCommunication(SerialPort.getCommPort(selectedPort), baudRate)
+                serialCommunication.open(SerialPort.getCommPort(selectedPort), baudRate)
                 isConnected.set(true)
+                val ledManager = LedManager(serialCommunication, 11)
+                ledsControl = LedsControl(ledManager, ledConfigs)
             } catch (e: Exception) {
                 showErrorAlert("Connection Error", "Failed to connect to $selectedPort", e.message ?: "Unknown error")
             }
@@ -173,6 +178,10 @@ class AppConfigController {
         if (ports.isNotEmpty()) {
             comPortComboBox.selectionModel.selectFirst()
         }
+    }
+
+    private fun connectToTables() {
+
     }
 
     private fun loadConfiguration() {

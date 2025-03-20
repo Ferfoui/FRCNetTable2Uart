@@ -1,4 +1,4 @@
-package fr.ferfoui.nt2u.gui
+package fr.ferfoui.nt2u.app
 
 import fr.ferfoui.nt2u.networktable.loadNetworkTableLibrairies
 import javafx.application.Application

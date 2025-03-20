@@ -1,4 +1,4 @@
-package fr.ferfoui.nt2u
+package fr.ferfoui.nt2u.app
 
 import fr.ferfoui.nt2u.model.LedConfig
 import java.io.File

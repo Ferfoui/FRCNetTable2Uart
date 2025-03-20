@@ -6,10 +6,13 @@ import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import kotlin.jvm.Throws
 
-class SerialCommunication(private val port: SerialPort, private val baudRate: Int = 9600) : AutoCloseable {
+class SerialCommunication : AutoCloseable {
+
+    private lateinit var port: SerialPort
 
     @Throws(IOException::class)
-    fun open() {
+    fun open(serialPort: SerialPort, baudRate: Int) {
+        this.port = serialPort
         if (!port.openPort())
             throw IOException("Failed to open port")
 

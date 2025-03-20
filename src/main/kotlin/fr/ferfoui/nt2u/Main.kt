@@ -17,7 +17,7 @@ fun main() {
 fun ledsTest() {
     val ports = SerialPort.getCommPorts()
 
-    val serialCommunication: SerialCommunication
+    val serialCommunication = SerialCommunication()
     var rpiPort: SerialPort? = null
 
     ports.forEach { port ->
@@ -29,7 +29,7 @@ fun ledsTest() {
     }
 
     if (rpiPort != null) {
-        serialCommunication = SerialCommunication(rpiPort!!, 115_200)
+        serialCommunication.open(rpiPort!!, 115_200)
 
         val ledManager = LedManager(serialCommunication, 11)
 
