@@ -24,7 +24,7 @@ class DashboardAccessor {
         instance.startDSClient()
     }
 
-    fun subscribe(topic: String, callback: (String) -> Unit) {
+    fun subscribeToString(topic: String, callback: (String) -> Unit) {
         val subscriber = smartDashboardTable.getStringTopic(topic).subscribe("true")
 
         val listenerHandle = instance.addListener(subscriber,
@@ -35,7 +35,21 @@ class DashboardAccessor {
 
         callback(subscriber.get())
 
-        // TODO: Handle other types of values
+        subscribers[topic] = subscriber
+        listenerHandles.add(listenerHandle)
+    }
+
+    fun subscribeToBoolean(topic: String, callback: (Boolean) -> Unit) {
+        val subscriber = smartDashboardTable.getBooleanTopic(topic).subscribe(false)
+
+        val listenerHandle = instance.addListener(
+            subscriber,
+            EnumSet.of(NetworkTableEvent.Kind.kValueAll)
+        ) { event ->
+            callback(subscriber.get())
+        }
+
+        callback(subscriber.get())
         subscribers[topic] = subscriber
         listenerHandles.add(listenerHandle)
     }
