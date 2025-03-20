@@ -25,14 +25,18 @@ class DashboardAccessor {
     }
 
     fun subscribe(topic: String, callback: (String) -> Unit) {
-        val subscriber = subscribers[topic]
+        val subscriber = smartDashboardTable.getStringTopic(topic).subscribe("true")
 
         val listenerHandle = instance.addListener(subscriber,
             EnumSet.of(NetworkTableEvent.Kind.kValueAll)
         ) { event ->
             callback(event.valueData.toString())
         }
+
+        callback(subscriber.get())
+
         // TODO: Handle other types of values
+        subscribers[topic] = subscriber
         listenerHandles.add(listenerHandle)
     }
 

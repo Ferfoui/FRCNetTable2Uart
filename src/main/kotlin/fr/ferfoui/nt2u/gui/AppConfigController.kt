@@ -143,6 +143,7 @@ class AppConfigController {
     @FXML
     fun onDisconnect() {
         try {
+            ledsControl.stop()
             serialCommunication.close()
             isConnected.set(false)
         } catch (e: Exception) {

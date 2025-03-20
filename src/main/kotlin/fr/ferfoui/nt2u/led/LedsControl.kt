@@ -4,15 +4,16 @@ import fr.ferfoui.nt2u.model.LedConfig
 import fr.ferfoui.nt2u.networktable.DashboardAccessor
 import javafx.collections.ObservableList
 
-class LedsControl(val ledManager: LedManager, ledConfigs: ObservableList<LedConfig>) {
+class LedsControl(private val ledManager: LedManager, ledConfigs: ObservableList<LedConfig>) {
 
     private val dashboardAccessor = DashboardAccessor()
 
     init {
-        ledConfigs.forEach {
-            dashboardAccessor.subscribe(it.networkTableTopic) { value ->
-                ledManager.setLedState(it.ledNumber, value.toBoolean())
-            }
+        ledConfigs.filter { it.networkTableTopic.isNotEmpty() }
+            .forEach {
+                dashboardAccessor.subscribe(it.networkTableTopic) { value ->
+                    ledManager.setLedState(it.ledNumber, true)
+                }
         }
     }
 
