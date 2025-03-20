@@ -1,5 +1,6 @@
 package fr.ferfoui.nt2u.gui
 
+import fr.ferfoui.nt2u.networktable.loadNetworkTableLibrairies
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
@@ -21,6 +22,7 @@ class NetworkTables2UartApp : Application() {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
+            loadNetworkTableLibrairies()
             launch(NetworkTables2UartApp::class.java)
         }
     }
