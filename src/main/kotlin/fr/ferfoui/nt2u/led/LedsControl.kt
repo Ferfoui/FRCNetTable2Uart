@@ -25,6 +25,7 @@ class LedsControl(val ledManager: LedManager, ledConfigs: ObservableList<LedConf
     }
 
     fun stop() {
+        dashboardAccessor.close()
         ledManager.stop()
     }
     

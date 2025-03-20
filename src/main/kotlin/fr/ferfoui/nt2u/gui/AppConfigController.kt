@@ -130,9 +130,8 @@ class AppConfigController {
         if (selectedPort != null && baudRate != null) {
             try {
                 serialCommunication.open(SerialPort.getCommPort(selectedPort), baudRate)
+                connectLedsToTables()
                 isConnected.set(true)
-                val ledManager = LedManager(serialCommunication, 11)
-                ledsControl = LedsControl(ledManager, ledConfigs)
             } catch (e: Exception) {
                 showErrorAlert("Connection Error", "Failed to connect to $selectedPort", e.message ?: "Unknown error")
             }
@@ -180,8 +179,9 @@ class AppConfigController {
         }
     }
 
-    private fun connectToTables() {
-
+    private fun connectLedsToTables() {
+        val ledManager = LedManager(serialCommunication, 11)
+        ledsControl = LedsControl(ledManager, ledConfigs)
     }
 
     private fun loadConfiguration() {

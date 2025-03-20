@@ -50,7 +50,7 @@ class DashboardAccessor {
     }
 
     fun close() {
-
+        listenerHandles.forEach { instance.removeListener(it) }
         instance.stopClient()
     }
 

@@ -57,7 +57,7 @@ javafx {
 }
 
 application {
-    mainClass.set("fr.ferfoui.nt2u.gui.NetworkTables2UartApp")
+    mainClass.set("fr.ferfoui.nt2u.app.NetworkTables2UartApp")
 }
 
 tasks.test {
