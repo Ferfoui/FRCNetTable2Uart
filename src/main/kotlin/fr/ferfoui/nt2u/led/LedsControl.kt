@@ -1,9 +1,8 @@
 package fr.ferfoui.nt2u.led
 
 import fr.ferfoui.nt2u.networktable.DashboardAccessor
-import javafx.collections.ObservableList
 
-class LedsControl(private val ledManager: LedManager, ledConfigs: ObservableList<LedConfig>) {
+class LedsControl(private val ledManager: LedManager, ledConfigs: List<LedConfig>) {
 
     private val dashboardAccessor = DashboardAccessor()
 
@@ -26,7 +25,7 @@ class LedsControl(private val ledManager: LedManager, ledConfigs: ObservableList
 
     private fun subscribeToString(ledConfig: LedConfig) {
         dashboardAccessor.subscribeToString(ledConfig.networkTableTopic) { value ->
-            ledManager.setLedState(ledConfig.ledNumber, value.toBoolean())
+            ledManager.setLedState(ledConfig.ledNumber, ledConfig.compare(value))
         }
     }
 

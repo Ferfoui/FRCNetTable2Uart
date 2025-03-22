@@ -106,7 +106,7 @@ class AppConfigController {
             val ledConfig = event.rowValue
             ledConfig.valueType = event.newValue
 
-            // Refresh the table to update condition options
+            // Refresh the table to update condition options and compare value
             ledTableView.refresh()
         }
 
@@ -170,9 +170,123 @@ class AppConfigController {
             ledConfig.condition = event.newValue
         }
 
-        // Set up compare value column
+        // Set up compare value column with type validation
         compareValueColumn.cellValueFactory = PropertyValueFactory("compareValue")
-        compareValueColumn.cellFactory = TextFieldTableCell.forTableColumn()
+        compareValueColumn.setCellFactory {
+            object : TableCell<LedConfig, String>() {
+                private val textField = TextField()
+
+                init {
+                    textField.setOnAction {
+                        if (isEditing) {
+                            commitEdit(textField.text)
+                        }
+                    }
+
+                    textField.focusedProperty().addListener { _, _, newValue ->
+                        if (!newValue && isEditing) {
+                            // Validate and commit when focus is lost
+                            if (validateInput()) {
+                                commitEdit(textField.text)
+                            } else {
+                                cancelEdit()
+                            }
+                        }
+                    }
+                }
+
+                private fun validateInput(): Boolean {
+                    val ledConfig = tableRow.item
+                    return ledConfig.isValidCompareValue(textField.text)
+                }
+
+                override fun startEdit() {
+                    // Don't allow editing for Boolean type
+                    val ledConfig = tableRow.item
+                    if (ledConfig.valueType == LedConfig.ValueType.BOOLEAN) {
+                        return
+                    }
+
+                    super.startEdit()
+                    if (!isEmpty) {
+                        textField.text = item ?: ""
+                        text = null
+                        graphic = textField
+                        textField.requestFocus()
+                        textField.selectAll()
+                    }
+                }
+
+                override fun cancelEdit() {
+                    super.cancelEdit()
+                    text = item
+                    graphic = null
+                }
+
+                override fun updateItem(item: String?, empty: Boolean) {
+                    super.updateItem(item, empty)
+
+                    if (empty) {
+                        text = null
+                        graphic = null
+                        style = ""
+                    } else {
+                        if (isEditing) {
+                            textField.text = item ?: ""
+                            text = null
+                            graphic = textField
+                        } else {
+                            text = item ?: ""
+                            graphic = null
+
+                            // Style based on value type
+                            val ledConfig = tableRow?.item
+                            if (ledConfig != null) {
+                                when (ledConfig.valueType) {
+                                    LedConfig.ValueType.BOOLEAN -> {
+                                        style = "-fx-text-fill: gray; -fx-font-style: italic;"
+                                    }
+                                    else -> {
+                                        style = ""
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                override fun commitEdit(newValue: String?) {
+                    // Validate the input before committing
+                    val ledConfig = tableRow.item
+                    if (ledConfig != null && newValue != null) {
+                        if (ledConfig.isValidCompareValue(newValue)) {
+                            super.commitEdit(newValue)
+                        } else {
+                            // Show error styling
+                            textField.style = "-fx-border-color: red;"
+
+                            // Show error tooltip
+                            val tooltip = when (ledConfig.valueType) {
+                                LedConfig.ValueType.INT -> "Please enter a valid integer"
+                                LedConfig.ValueType.DOUBLE -> "Please enter a valid number"
+                                else -> "Invalid input"
+                            }
+
+                            val alert = Alert(Alert.AlertType.ERROR)
+                            alert.title = "Invalid Input"
+                            alert.headerText = "Invalid Compare Value"
+                            alert.contentText = tooltip
+                            alert.showAndWait()
+
+                            // Reset to previous value
+                            cancelEdit()
+                        }
+                    } else {
+                        super.commitEdit(newValue)
+                    }
+                }
+            }
+        }
         compareValueColumn.setOnEditCommit { event ->
             val ledConfig = event.rowValue
             ledConfig.compareValue = event.newValue

@@ -31,9 +31,16 @@ class LedConfig(
     var valueType: ValueType
         get() = valueTypeProperty.get()
         set(value) {
+            val oldType = valueTypeProperty.get()
             valueTypeProperty.set(value)
-            // Update condition based on new value type
+
+            // Update condition based on the new value type
             condition = getDefaultConditionForType(value)
+
+            // Reset compare value when type changes
+            if (oldType != value) {
+                resetCompareValue()
+            }
         }
 
     var condition: Condition
@@ -57,15 +64,15 @@ class LedConfig(
         }
     }
 
-    enum class Condition(val displayName: String, val applicableTypes: List<ValueType>) {
-        EQUALS_TRUE("value == true", listOf(ValueType.BOOLEAN)),
-        NOT_EQUALS_TRUE("value != true", listOf(ValueType.BOOLEAN)),
+    enum class Condition(val displayName: String, val applicableTypes: List<ValueType>, val compare: (String, String) -> Boolean) {
+        EQUALS_TRUE("value == true", listOf(ValueType.BOOLEAN), { value, _ -> value == "true" }),
+        NOT_EQUALS_TRUE("value != true", listOf(ValueType.BOOLEAN), { value, _ -> value != "true" }),
 
-        GREATER_THAN("value > [value]", listOf(ValueType.DOUBLE, ValueType.INT)),
-        LESS_THAN("value < [value]", listOf(ValueType.DOUBLE, ValueType.INT)),
+        GREATER_THAN("value > [value]", listOf(ValueType.DOUBLE, ValueType.INT), { value, compareValue -> value.toDouble() > compareValue.toDouble() }),
+        LESS_THAN("value < [value]", listOf(ValueType.DOUBLE, ValueType.INT), { value, compareValue -> value.toDouble() < compareValue.toDouble() }),
 
-        EQUALS("value == [value]", listOf(ValueType.STRING, ValueType.INT, ValueType.DOUBLE)),
-        NOT_EQUALS("value != [value]", listOf(ValueType.STRING, ValueType.INT, ValueType.DOUBLE));
+        EQUALS("value == [value]", listOf(ValueType.STRING, ValueType.INT, ValueType.DOUBLE), { value, compareValue -> value == compareValue }),
+        NOT_EQUALS("value != [value]", listOf(ValueType.STRING, ValueType.INT, ValueType.DOUBLE), { value, compareValue -> value != compareValue });
 
         override fun toString(): String {
             return displayName
@@ -86,6 +93,37 @@ class LedConfig(
      */
     fun getAvailableConditions(): List<Condition> {
         return Condition.entries.filter { it.applicableTypes.contains(valueType) }
+    }
+
+    /**
+     * Compare the given value with the compare value based on the current condition
+     */
+    fun compare(value: String): Boolean {
+        return condition.compare(value, compareValue)
+    }
+
+    /**
+     * Reset the compare value based on the current value type
+     */
+    fun resetCompareValue() {
+        compareValue = when (valueType) {
+            ValueType.BOOLEAN -> ""
+            ValueType.INT -> "0"
+            ValueType.DOUBLE -> "0.0"
+            ValueType.STRING -> ""
+        }
+    }
+
+    /**
+     * Validate if the given string is valid for the current value type
+     */
+    fun isValidCompareValue(value: String): Boolean {
+        return when (valueType) {
+            ValueType.BOOLEAN -> true // Boolean doesn't use compare value
+            ValueType.INT -> value.toIntOrNull() != null
+            ValueType.DOUBLE -> value.toDoubleOrNull() != null
+            ValueType.STRING -> true // Any string is valid for the string type
+        }
     }
 }
 
