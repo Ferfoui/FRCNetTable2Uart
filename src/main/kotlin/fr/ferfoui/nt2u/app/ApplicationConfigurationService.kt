@@ -57,7 +57,7 @@ class ApplicationConfigurationService {
         for (ledConfig in ledConfigs) {
             config["led.${ledConfig.ledNumber}.topic"] = ledConfig.networkTableTopic
             config["led.${ledConfig.ledNumber}.type"] = ledConfig.valueType.name
-            config["led.${ledConfig.ledNumber}.condition"] = ledConfig.condition.name
+            config["led.${ledConfig.ledNumber}.condition"] = ledConfig.condition!!.name
             config["led.${ledConfig.ledNumber}.compareValue"] = ledConfig.compareValue
         }
 
@@ -78,15 +78,20 @@ class ApplicationConfigurationService {
             val typeStr = config["led.${ledNumber}.type"] ?: LedConfig.ValueType.BOOLEAN.name
             val type = try {
                 LedConfig.ValueType.valueOf(typeStr)
-            } catch (_: IllegalArgumentException) {
+            } catch (e: IllegalArgumentException) {
                 LedConfig.ValueType.BOOLEAN
             }
 
-            val conditionStr = config["led.${ledNumber}.condition"] ?: LedConfig.Condition.EQUALS_TRUE.name
-            val condition = try {
-                LedConfig.Condition.valueOf(conditionStr)
-            } catch (_: IllegalArgumentException) {
-                LedConfig.Condition.EQUALS_TRUE
+            // We'll pass null for condition and let the LedConfig constructor set the default
+            val conditionStr = config["led.${ledNumber}.condition"]
+            val condition = if (conditionStr != null) {
+                try {
+                    LedConfig.Condition.valueOf(conditionStr)
+                } catch (e: IllegalArgumentException) {
+                    null // Will use default based on type
+                }
+            } else {
+                null // Will use default based on type
             }
 
             val compareValue = config["led.${ledNumber}.compareValue"] ?: ""

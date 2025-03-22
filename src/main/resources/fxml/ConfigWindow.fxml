@@ -51,15 +51,18 @@
             </Label>
             <TableView fx:id="ledTableView" GridPane.rowIndex="2" GridPane.columnIndex="1" prefHeight="250">
                 <columns>
-                    <TableColumn fx:id="ledNumberColumn" text="LED #" prefWidth="60" editable="false"/>
-                    <TableColumn fx:id="topicColumn" text="NetworkTable Topic" prefWidth="200"/>
-                    <TableColumn fx:id="valueTypeColumn" text="Value Type" prefWidth="100"/>
-                    <TableColumn fx:id="conditionColumn" text="Condition" prefWidth="150"/>
-                    <TableColumn fx:id="compareValueColumn" text="Compare Value" prefWidth="120"/>
+                    <TableColumn fx:id="ledNumberColumn" text="LED #" prefWidth="60" minWidth="60" maxWidth="60" editable="false"/>
+                    <TableColumn fx:id="topicColumn" text="NetworkTable Topic" prefWidth="180" minWidth="150" maxWidth="240"/>
+                    <TableColumn fx:id="valueTypeColumn" text="Value Type" prefWidth="100" minWidth="100" maxWidth="100"/>
+                    <TableColumn fx:id="conditionColumn" text="Condition" prefWidth="145" minWidth="145" maxWidth="145"/>
+                    <TableColumn fx:id="compareValueColumn" text="Compare Value" minWidth="100"/>
                 </columns>
                 <placeholder>
                     <Label text="No LED configurations available"/>
                 </placeholder>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
             </TableView>
 
             <!-- Auto Connect Option -->

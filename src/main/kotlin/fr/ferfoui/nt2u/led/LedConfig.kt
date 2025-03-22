@@ -11,14 +11,19 @@ class LedConfig(
     ledNumber: Int,
     networkTableTopic: String = "",
     valueType: ValueType = ValueType.BOOLEAN,
-    condition: Condition = Condition.EQUALS_TRUE,
+    condition: Condition? = null,
     compareValue: String = ""
 ) {
     val ledNumberProperty = SimpleIntegerProperty(ledNumber)
     val networkTableTopicProperty = SimpleStringProperty(networkTableTopic)
     val valueTypeProperty = SimpleObjectProperty(valueType)
-    val conditionProperty = SimpleObjectProperty(condition)
+    val conditionProperty = SimpleObjectProperty<Condition>()
     val compareValueProperty = SimpleStringProperty(compareValue)
+
+    init {
+        // Ensure we have a valid condition for the value type
+        conditionProperty.set(condition ?: getDefaultConditionForType(valueType))
+    }
 
     var ledNumber: Int
         get() = ledNumberProperty.get()
@@ -34,8 +39,12 @@ class LedConfig(
             val oldType = valueTypeProperty.get()
             valueTypeProperty.set(value)
 
-            // Update condition based on the new value type
-            condition = getDefaultConditionForType(value)
+            // Update condition based on new value type if the current condition
+            // is not applicable to the new type
+            val currentCondition = conditionProperty.get()
+            if (!currentCondition.applicableTypes.contains(value)) {
+                condition = getDefaultConditionForType(value)
+            }
 
             // Reset compare value when type changes
             if (oldType != value) {
@@ -43,9 +52,12 @@ class LedConfig(
             }
         }
 
-    var condition: Condition
+    var condition: Condition?
         get() = conditionProperty.get()
-        set(value) = conditionProperty.set(value)
+        set(value) {
+            // Never allow null condition - use default if null is provided
+            conditionProperty.set(value ?: getDefaultConditionForType(valueType))
+        }
 
     var compareValue: String
         get() = compareValueProperty.get()
@@ -79,6 +91,9 @@ class LedConfig(
         }
     }
 
+    /**
+     * Get the default condition for a given value type
+     */
     private fun getDefaultConditionForType(type: ValueType): Condition {
         return when (type) {
             ValueType.BOOLEAN -> Condition.EQUALS_TRUE
@@ -99,7 +114,7 @@ class LedConfig(
      * Compare the given value with the compare value based on the current condition
      */
     fun compare(value: String): Boolean {
-        return condition.compare(value, compareValue)
+        return condition!!.compare(value, compareValue)
     }
 
     /**
@@ -125,5 +140,6 @@ class LedConfig(
             ValueType.STRING -> true // Any string is valid for the string type
         }
     }
+
 }
 

@@ -149,8 +149,20 @@ class AppConfigController {
                 override fun updateItem(item: LedConfig.Condition?, empty: Boolean) {
                     super.updateItem(item, empty)
 
-                    if (empty || item == null) {
+                    if (empty) {
                         text = null
+                        graphic = null
+                    } else if (item == null) {
+                        // If the condition is null, get the default condition for the current value type
+                        val ledConfig = tableRow?.item
+                        if (ledConfig != null) {
+                            // This will trigger the setter which will set a default condition
+                            ledConfig.condition = null
+                            // Update the display with the new default condition
+                            text = ledConfig.condition.toString()
+                        } else {
+                            text = "Unknown"
+                        }
                         graphic = null
                     } else {
                         if (isEditing) {
@@ -193,6 +205,9 @@ class AppConfigController {
                             }
                         }
                     }
+
+                    // Make the text field expand to fill available space
+                    textField.prefWidthProperty().bind(compareValueColumn.widthProperty().subtract(5))
                 }
 
                 private fun validateInput(): Boolean {
@@ -242,12 +257,13 @@ class AppConfigController {
                             // Style based on value type
                             val ledConfig = tableRow?.item
                             if (ledConfig != null) {
-                                when (ledConfig.valueType) {
+                                style = when (ledConfig.valueType) {
                                     LedConfig.ValueType.BOOLEAN -> {
-                                        style = "-fx-text-fill: gray; -fx-font-style: italic;"
+                                        "-fx-text-fill: gray; -fx-font-style: italic;"
                                     }
+
                                     else -> {
-                                        style = ""
+                                        ""
                                     }
                                 }
                             }
