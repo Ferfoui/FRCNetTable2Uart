@@ -13,9 +13,9 @@ class NetworkTables2UartApp : Application() {
         val root = loader.load<javafx.scene.Parent>()
 
         stage.title = "NetTables2UART Configuration"
-        stage.scene = Scene(root, 600.0, 500.0)
+        stage.scene = Scene(root, 800.0, 500.0)
         stage.scene.stylesheets.add(javaClass.getResource("/css/styles.css")!!.toExternalForm())
-        stage.isResizable = true  // Changed to true to allow resizing
+        stage.isResizable = true
         stage.show()
     }
 

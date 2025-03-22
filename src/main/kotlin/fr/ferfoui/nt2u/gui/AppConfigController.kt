@@ -4,7 +4,7 @@ import com.fazecast.jSerialComm.SerialPort
 import fr.ferfoui.nt2u.app.ApplicationConfigurationService
 import fr.ferfoui.nt2u.led.LedManager
 import fr.ferfoui.nt2u.led.LedsControl
-import fr.ferfoui.nt2u.model.LedConfig
+import fr.ferfoui.nt2u.led.LedConfig
 import fr.ferfoui.nt2u.serial.SerialCommunication
 import fr.ferfoui.nt2u.serial.getAvailableBaudRates
 import fr.ferfoui.nt2u.serial.getAvailableComPorts
@@ -37,6 +37,10 @@ class AppConfigController {
     @FXML private lateinit var ledNumberColumn: TableColumn<LedConfig, Int>
     @FXML private lateinit var topicColumn: TableColumn<LedConfig, String>
     @FXML private lateinit var valueTypeColumn: TableColumn<LedConfig, LedConfig.ValueType>
+    @FXML private lateinit var conditionColumn: TableColumn<LedConfig, LedConfig.Condition>
+    @FXML private lateinit var compareValueColumn: TableColumn<LedConfig, String>
+
+    private lateinit var ledsControl: LedsControl
 
     private val ledConfigs: ObservableList<LedConfig> = FXCollections.observableArrayList()
 
@@ -46,7 +50,6 @@ class AppConfigController {
     private val statusText = SimpleStringProperty("Not Connected")
 
     private val serialCommunication = SerialCommunication()
-    private lateinit var ledsControl: LedsControl
 
     @FXML
     fun initialize() {
@@ -102,6 +105,77 @@ class AppConfigController {
         valueTypeColumn.setOnEditCommit { event ->
             val ledConfig = event.rowValue
             ledConfig.valueType = event.newValue
+
+            // Refresh the table to update condition options
+            ledTableView.refresh()
+        }
+
+        // Set up condition column with dynamic options based on the value type
+        conditionColumn.cellValueFactory = PropertyValueFactory("condition")
+        conditionColumn.setCellFactory {
+            object : TableCell<LedConfig, LedConfig.Condition>() {
+                private val comboBox = ComboBox<LedConfig.Condition>()
+
+                init {
+                    comboBox.setOnAction {
+                        if (isEditing) {
+                            commitEdit(comboBox.selectionModel.selectedItem)
+                        }
+                    }
+                }
+
+                override fun startEdit() {
+                    super.startEdit()
+                    if (!isEmpty) {
+                        val ledConfig = tableRow.item
+                        val availableConditions = ledConfig.getAvailableConditions()
+
+                        comboBox.items.clear()
+                        comboBox.items.addAll(availableConditions)
+                        comboBox.selectionModel.select(item)
+
+                        text = null
+                        graphic = comboBox
+                        comboBox.show()
+                    }
+                }
+
+                override fun cancelEdit() {
+                    super.cancelEdit()
+                    text = item?.toString()
+                    graphic = null
+                }
+
+                override fun updateItem(item: LedConfig.Condition?, empty: Boolean) {
+                    super.updateItem(item, empty)
+
+                    if (empty || item == null) {
+                        text = null
+                        graphic = null
+                    } else {
+                        if (isEditing) {
+                            comboBox.selectionModel.select(item)
+                            text = null
+                            graphic = comboBox
+                        } else {
+                            text = item.toString()
+                            graphic = null
+                        }
+                    }
+                }
+            }
+        }
+        conditionColumn.setOnEditCommit { event ->
+            val ledConfig = event.rowValue
+            ledConfig.condition = event.newValue
+        }
+
+        // Set up compare value column
+        compareValueColumn.cellValueFactory = PropertyValueFactory("compareValue")
+        compareValueColumn.cellFactory = TextFieldTableCell.forTableColumn()
+        compareValueColumn.setOnEditCommit { event ->
+            val ledConfig = event.rowValue
+            ledConfig.compareValue = event.newValue
         }
 
         // Make the table editable

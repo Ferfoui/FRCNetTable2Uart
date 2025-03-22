@@ -9,7 +9,7 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="fr.ferfoui.nt2u.gui.AppConfigController"
-            prefHeight="400.0" prefWidth="600.0"
+            prefHeight="500.0" prefWidth="800.0"
             styleClass="config-window">
 
     <top>
@@ -49,11 +49,13 @@
                     <Insets top="5"/>
                 </GridPane.margin>
             </Label>
-            <TableView fx:id="ledTableView" GridPane.rowIndex="2" GridPane.columnIndex="1" prefHeight="200">
+            <TableView fx:id="ledTableView" GridPane.rowIndex="2" GridPane.columnIndex="1" prefHeight="250">
                 <columns>
                     <TableColumn fx:id="ledNumberColumn" text="LED #" prefWidth="60" editable="false"/>
-                    <TableColumn fx:id="topicColumn" text="SmartDashboard Topic" prefWidth="200"/>
+                    <TableColumn fx:id="topicColumn" text="NetworkTable Topic" prefWidth="200"/>
                     <TableColumn fx:id="valueTypeColumn" text="Value Type" prefWidth="100"/>
+                    <TableColumn fx:id="conditionColumn" text="Condition" prefWidth="150"/>
+                    <TableColumn fx:id="compareValueColumn" text="Compare Value" prefWidth="120"/>
                 </columns>
                 <placeholder>
                     <Label text="No LED configurations available"/>

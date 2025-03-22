@@ -1,6 +1,5 @@
 package fr.ferfoui.nt2u.led
 
-import fr.ferfoui.nt2u.model.LedConfig
 import fr.ferfoui.nt2u.networktable.DashboardAccessor
 import javafx.collections.ObservableList
 

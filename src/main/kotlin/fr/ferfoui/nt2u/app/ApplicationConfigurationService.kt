@@ -1,6 +1,6 @@
 package fr.ferfoui.nt2u.app
 
-import fr.ferfoui.nt2u.model.LedConfig
+import fr.ferfoui.nt2u.led.LedConfig
 import java.io.File
 import java.util.Properties
 
@@ -57,6 +57,8 @@ class ApplicationConfigurationService {
         for (ledConfig in ledConfigs) {
             config["led.${ledConfig.ledNumber}.topic"] = ledConfig.networkTableTopic
             config["led.${ledConfig.ledNumber}.type"] = ledConfig.valueType.name
+            config["led.${ledConfig.ledNumber}.condition"] = ledConfig.condition.name
+            config["led.${ledConfig.ledNumber}.compareValue"] = ledConfig.compareValue
         }
 
         saveConfiguration(config)
@@ -72,14 +74,24 @@ class ApplicationConfigurationService {
         // Default configuration for LEDs 3-10 if not found
         for (ledNumber in 3..10) {
             val topic = config["led.${ledNumber}.topic"] ?: ""
+
             val typeStr = config["led.${ledNumber}.type"] ?: LedConfig.ValueType.BOOLEAN.name
             val type = try {
                 LedConfig.ValueType.valueOf(typeStr)
-            } catch (e: IllegalArgumentException) {
+            } catch (_: IllegalArgumentException) {
                 LedConfig.ValueType.BOOLEAN
             }
 
-            ledConfigs.add(LedConfig(ledNumber, topic, type))
+            val conditionStr = config["led.${ledNumber}.condition"] ?: LedConfig.Condition.EQUALS_TRUE.name
+            val condition = try {
+                LedConfig.Condition.valueOf(conditionStr)
+            } catch (_: IllegalArgumentException) {
+                LedConfig.Condition.EQUALS_TRUE
+            }
+
+            val compareValue = config["led.${ledNumber}.compareValue"] ?: ""
+
+            ledConfigs.add(LedConfig(ledNumber, topic, type, condition, compareValue))
         }
 
         return ledConfigs
