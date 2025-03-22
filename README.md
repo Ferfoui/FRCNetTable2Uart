@@ -9,7 +9,7 @@ specifically the [SmartDashboard](https://docs.wpilib.org/en/stable/docs/softwar
 It uses values to turn on and off leds on a
 [Raspberry Pi Pico](https://www.raspberrypi.org/products/raspberry-pi-pico/) (via UART).
 
-This project aims to control the [Geekos FRC team](https://frc-events.firstinspires.org/team/9220)'s
+This project aims to control leds of the [Geekos FRC team](https://frc-events.firstinspires.org/team/9220)'s
 [Operator Console](https://www.chiefdelphi.com/t/operator-console-pictures/) to monitor the state of the robot.
 
 ## Installation
