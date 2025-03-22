@@ -10,7 +10,7 @@ plugins {
 }
 
 group = "fr.ferfoui.nt2u"
-version = "1.0-SNAPSHOT"
+version = "0.1"
 
 repositories {
     mavenCentral()
@@ -57,7 +57,7 @@ javafx {
 }
 
 application {
-    mainClass.set("fr.ferfoui.nt2u.app.NetworkTables2UartApp")
+    mainClass.set("fr.ferfoui.nt2u.app.NetworkTable2UartApp")
 }
 
 tasks.test {

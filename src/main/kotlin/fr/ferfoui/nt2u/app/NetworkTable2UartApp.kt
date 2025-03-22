@@ -6,13 +6,13 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.stage.Stage
 
-class NetworkTables2UartApp : Application() {
+class NetworkTable2UartApp : Application() {
 
     override fun start(stage: Stage) {
         val loader = FXMLLoader(javaClass.getResource("/fxml/ConfigWindow.fxml"))
         val root = loader.load<javafx.scene.Parent>()
 
-        stage.title = "NetTables2UART Configuration"
+        stage.title = "FRCNetTable2UART"
         stage.scene = Scene(root, 800.0, 500.0)
         stage.scene.stylesheets.add(javaClass.getResource("/css/styles.css")!!.toExternalForm())
         stage.isResizable = true
@@ -23,7 +23,7 @@ class NetworkTables2UartApp : Application() {
         @JvmStatic
         fun main(args: Array<String>) {
             loadNetworkTableLibrairies()
-            launch(NetworkTables2UartApp::class.java)
+            launch(NetworkTable2UartApp::class.java)
         }
     }
 }

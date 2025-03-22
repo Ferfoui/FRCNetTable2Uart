@@ -14,13 +14,13 @@ This project aims to control the [Geekos FRC team](https://frc-events.firstinspi
 
 ## Installation
 
-It is not published yet
+You can download the .jar file from the [releases](https://github.com/Ferfoui/FRCNetTable2Uart/releases) page.
 
-And you need to have wpilib's jdk installed on your computer.
+You also need to have wpilib's jdk installed on your computer.
 You can download wpilib from [here](https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-2/wpilib-setup.html).
-You'll have it installed in `C:\Users\Public\wpilib\2025\jdk` by default on Windows.
+It will be installed in `C:\Users\Public\wpilib\2025\jdk` by default on Windows.
 
-## Running
+## Usage
 
 After installing the .jar file, you can run it with the following command:
 
@@ -31,8 +31,20 @@ C:\Users\Public\wpilib\2025\jdk\java.exe -jar FRCNetTable2Uart.jar
 You also have to be connected to the robot's network to be able to read the NetworkTable
 and to be connected to the Raspberry Pi Pico via USB.
 
-## Raspberry Pi Pico Code
+## NetworkTable2Uart App
 
-[PlatformIO](https://platformio.org/) has been used in this project to compile the code for the Raspberry Pi Pico.
+The program is divided into two parts: 
+- The first part is running on the computer and reads the values from the NetworkTable.
+- The second part is running on the Raspberry Pi Pico and controls the leds.
+
+### Computer Code
+
+The code is written in Kotlin, uses wpilib library to read the values from the NetworkTable and uses
+[jSerialComm](https://fazecast.github.io/jSerialComm/) library to send the values to the Raspberry Pi Pico via UART.
+
+### Raspberry Pi Pico Code
+
+[PlatformIO](https://platformio.org/) has been used in this project to compile the code for the Raspberry Pi Pico
+with [Arduino's framework](https://docs.platformio.org/en/latest/frameworks/arduino.html).
 The code is available in the [pico-control](https://github.com/Ferfoui/FRCNetTable2Uart/tree/main/pico-control) folder.
 
