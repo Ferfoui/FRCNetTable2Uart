@@ -25,7 +25,7 @@ class DashboardAccessor {
     }
 
     fun subscribeToString(topic: String, callback: (String) -> Unit) {
-        val subscriber = smartDashboardTable.getStringTopic(topic).subscribe("true")
+        val subscriber = smartDashboardTable.getStringTopic(topic).subscribe("")
 
         val listenerHandle = instance.addListener(subscriber,
             EnumSet.of(NetworkTableEvent.Kind.kValueAll)
@@ -50,6 +50,36 @@ class DashboardAccessor {
         }
 
         callback(subscriber.get())
+        subscribers[topic] = subscriber
+        listenerHandles.add(listenerHandle)
+    }
+
+    fun subscribeToInteger(topic: String, callback: (Int) -> Unit) {
+        val subscriber = smartDashboardTable.getIntegerTopic(topic).subscribe(0)
+
+        val listenerHandle = instance.addListener(
+            subscriber,
+            EnumSet.of(NetworkTableEvent.Kind.kValueAll)
+        ) { event ->
+            callback(subscriber.get().toInt())
+        }
+
+        callback(subscriber.get().toInt())
+        subscribers[topic] = subscriber
+        listenerHandles.add(listenerHandle)
+    }
+
+    fun subscribeToDouble(topic: String, callback: (Double) -> Unit) {
+        val subscriber = smartDashboardTable.getDoubleTopic(topic).subscribe(0.0)
+
+        val listenerHandle = instance.addListener(
+            subscriber,
+            EnumSet.of(NetworkTableEvent.Kind.kValueAll)
+        ) { event ->
+            callback(subscriber.get().toDouble())
+        }
+
+        callback(subscriber.get().toDouble())
         subscribers[topic] = subscriber
         listenerHandles.add(listenerHandle)
     }

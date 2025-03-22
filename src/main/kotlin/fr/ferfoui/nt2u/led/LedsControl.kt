@@ -31,19 +31,19 @@ class LedsControl(private val ledManager: LedManager, ledConfigs: List<LedConfig
 
     private fun subscribeToBoolean(ledConfig: LedConfig) {
         dashboardAccessor.subscribeToBoolean(ledConfig.networkTableTopic) { value ->
-            ledManager.setLedState(ledConfig.ledNumber, value)
+            ledManager.setLedState(ledConfig.ledNumber, ledConfig.compare(value.toString()))
         }
     }
 
     private fun subscribeToInt(ledConfig: LedConfig) {
         dashboardAccessor.subscribeToString(ledConfig.networkTableTopic) { value ->
-            ledManager.setLedState(ledConfig.ledNumber, value.toInt() != 0)
+            ledManager.setLedState(ledConfig.ledNumber, ledConfig.compare(value.toString()))
         }
     }
 
     private fun subscribeToDouble(ledConfig: LedConfig) {
         dashboardAccessor.subscribeToString(ledConfig.networkTableTopic) { value ->
-            ledManager.setLedState(ledConfig.ledNumber, value.toDouble() != 0.0)
+            ledManager.setLedState(ledConfig.ledNumber, ledConfig.compare(value.toString()))
         }
     }
 

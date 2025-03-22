@@ -123,8 +123,8 @@ class LedConfig(
     fun resetCompareValue() {
         compareValue = when (valueType) {
             ValueType.BOOLEAN -> ""
-            ValueType.INT -> "0"
-            ValueType.DOUBLE -> "0.0"
+            ValueType.INT -> "1"
+            ValueType.DOUBLE -> "1.0"
             ValueType.STRING -> ""
         }
     }
