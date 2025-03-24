@@ -21,6 +21,7 @@ class SerialCommunication : AutoCloseable {
         port.closePort()
     }
 
+    @Throws(IOException::class)
     fun write(data: String) {
         port.outputStream.write(data.toByteArray())
     }
@@ -35,7 +36,7 @@ class SerialCommunication : AutoCloseable {
         return String(buffer, 0, bytesRead)
     }
 
-    fun isOpen() = port.isOpen
+    fun isWritable() = port.isOpen && port.outputStream != null
 }
 
 fun getAvailableComPorts() =

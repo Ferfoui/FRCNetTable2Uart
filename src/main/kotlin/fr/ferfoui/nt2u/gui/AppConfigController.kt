@@ -352,6 +352,7 @@ class AppConfigController {
             isConnected.set(false)
         } catch (e: Exception) {
             showErrorAlert("Disconnection Error", "Failed to disconnect", e.message ?: "Unknown error")
+            e.printStackTrace()
         }
     }
 

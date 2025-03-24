@@ -5,6 +5,7 @@ import fr.ferfoui.nt2u.serial.resetLedsCommand
 import fr.ferfoui.nt2u.serial.setLedStateCommand
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import java.io.IOException
 
 class LedManager(private val serial: SerialCommunication, val ledCount: Int) {
     init {
@@ -19,9 +20,12 @@ class LedManager(private val serial: SerialCommunication, val ledCount: Int) {
     }
 
     fun stop() {
-        if (serial.isOpen())
+        try {
             serial.write(resetLedsCommand())
-        serial.close()
+        } catch (_: IOException) {
+        } finally {
+            serial.close()
+        }
     }
 }
 
