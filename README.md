@@ -25,7 +25,7 @@ It will be installed in `C:\Users\Public\wpilib\2025\jdk` by default on Windows.
 After installing the .jar file, you can run it with the following command:
 
 ```bash
-C:\Users\Public\wpilib\2025\jdk\java.exe -jar FRCNetTable2Uart.jar
+C:\Users\Public\wpilib\2025\jdk\bin\java.exe -jar FRCNetTable2Uart-0.1-all.jar
 ```
 
 You also have to be connected to the robot's network to be able to read the NetworkTable
