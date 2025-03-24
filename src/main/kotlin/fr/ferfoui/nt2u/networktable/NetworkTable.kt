@@ -7,11 +7,11 @@ import edu.wpi.first.util.WPIUtilJNI
 import fr.ferfoui.nt2u.app.NetworkTable2UartApp
 
 
-fun loadNetworkTableLibrairies() {
+fun loadNetworkTableLibrairies(classToLoad: Class<*>) {
     NetworkTablesJNI.Helper.setExtractOnStaticLoad(false)
     WPIUtilJNI.Helper.setExtractOnStaticLoad(false)
     WPIMathJNI.Helper.setExtractOnStaticLoad(false)
     CombinedRuntimeLoader.loadLibraries(
-        NetworkTable2UartApp::class.java, "wpiutiljni", "wpimathjni", "ntcorejni"
+        classToLoad, "wpiutiljni", "wpimathjni", "ntcorejni"
     )
 }

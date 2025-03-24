@@ -43,8 +43,10 @@ class NetworkTable2UartApp : Application() {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            loadNetworkTableLibrairies()
-            launch(NetworkTable2UartApp::class.java)
+            val appClass = NetworkTable2UartApp::class.java
+
+            loadNetworkTableLibrairies(appClass)
+            launch(appClass)
         }
     }
 }
