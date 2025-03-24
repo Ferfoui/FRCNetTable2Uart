@@ -19,7 +19,8 @@ class LedManager(private val serial: SerialCommunication, val ledCount: Int) {
     }
 
     fun stop() {
-        serial.write(resetLedsCommand())
+        if (serial.isOpen())
+            serial.write(resetLedsCommand())
         serial.close()
     }
 }

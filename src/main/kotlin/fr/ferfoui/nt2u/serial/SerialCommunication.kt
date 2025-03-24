@@ -1,8 +1,6 @@
 package fr.ferfoui.nt2u.serial
 
 import com.fazecast.jSerialComm.SerialPort
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import kotlin.jvm.Throws
 
@@ -36,6 +34,8 @@ class SerialCommunication : AutoCloseable {
         val bytesRead = port.inputStream.read(buffer)
         return String(buffer, 0, bytesRead)
     }
+
+    fun isOpen() = port.isOpen
 }
 
 fun getAvailableComPorts() =

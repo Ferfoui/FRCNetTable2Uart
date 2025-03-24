@@ -431,6 +431,9 @@ class AppConfigController {
     }
 
     private fun closeWindow() {
+        if (isConnected.get()) {
+            onDisconnect()
+        }
         val stage = saveButton.scene.window as Stage
         stage.close()
     }

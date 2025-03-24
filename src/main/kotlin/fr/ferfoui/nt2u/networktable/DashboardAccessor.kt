@@ -1,8 +1,12 @@
 package fr.ferfoui.nt2u.networktable
 
+import edu.wpi.first.networktables.BooleanSubscriber
+import edu.wpi.first.networktables.DoubleSubscriber
+import edu.wpi.first.networktables.IntegerSubscriber
 import edu.wpi.first.networktables.NetworkTable
 import edu.wpi.first.networktables.NetworkTableEvent
 import edu.wpi.first.networktables.NetworkTableInstance
+import edu.wpi.first.networktables.StringSubscriber
 import edu.wpi.first.networktables.Subscriber
 import java.util.*
 
@@ -29,8 +33,8 @@ class DashboardAccessor {
 
         val listenerHandle = instance.addListener(subscriber,
             EnumSet.of(NetworkTableEvent.Kind.kValueAll)
-        ) { event ->
-            callback(event.valueData.toString())
+        ) { _ ->
+            callback((subscribers[topic] as StringSubscriber).get())
         }
 
         callback(subscriber.get())
@@ -45,8 +49,8 @@ class DashboardAccessor {
         val listenerHandle = instance.addListener(
             subscriber,
             EnumSet.of(NetworkTableEvent.Kind.kValueAll)
-        ) { event ->
-            callback(subscriber.get())
+        ) { _ ->
+            callback((subscribers[topic] as BooleanSubscriber).get())
         }
 
         callback(subscriber.get())
@@ -60,8 +64,8 @@ class DashboardAccessor {
         val listenerHandle = instance.addListener(
             subscriber,
             EnumSet.of(NetworkTableEvent.Kind.kValueAll)
-        ) { event ->
-            callback(subscriber.get().toInt())
+        ) { _ ->
+            callback((subscribers[topic] as IntegerSubscriber).get().toInt())
         }
 
         callback(subscriber.get().toInt())
@@ -75,11 +79,11 @@ class DashboardAccessor {
         val listenerHandle = instance.addListener(
             subscriber,
             EnumSet.of(NetworkTableEvent.Kind.kValueAll)
-        ) { event ->
-            callback(subscriber.get().toDouble())
+        ) { _ ->
+            callback((subscribers[topic] as DoubleSubscriber).get())
         }
 
-        callback(subscriber.get().toDouble())
+        callback(subscriber.get())
         subscribers[topic] = subscriber
         listenerHandles.add(listenerHandle)
     }
