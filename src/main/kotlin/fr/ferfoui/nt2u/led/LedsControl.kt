@@ -26,28 +26,24 @@ class LedsControl(private val ledManager: LedManager, ledConfigs: List<LedConfig
     private fun subscribeToString(ledConfig: LedConfig) {
         dashboardAccessor.subscribeToString(ledConfig.networkTableTopic) { value ->
             ledManager.setLedState(ledConfig.ledNumber, ledConfig.compare(value))
-            println("Setting ${ledConfig.ledNumber} to $value")
         }
     }
 
     private fun subscribeToBoolean(ledConfig: LedConfig) {
         dashboardAccessor.subscribeToBoolean(ledConfig.networkTableTopic) { value ->
             ledManager.setLedState(ledConfig.ledNumber, ledConfig.compare(value.toString()))
-            println("Setting ${ledConfig.ledNumber} to $value")
         }
     }
 
     private fun subscribeToInt(ledConfig: LedConfig) {
         dashboardAccessor.subscribeToInteger(ledConfig.networkTableTopic) { value ->
             ledManager.setLedState(ledConfig.ledNumber, ledConfig.compare(value.toString()))
-            println("Setting ${ledConfig.ledNumber} to $value")
         }
     }
 
     private fun subscribeToDouble(ledConfig: LedConfig) {
         dashboardAccessor.subscribeToDouble(ledConfig.networkTableTopic) { value ->
             ledManager.setLedState(ledConfig.ledNumber, ledConfig.compare(value.toString()))
-            println("Setting ${ledConfig.ledNumber} to $value")
         }
     }
 
