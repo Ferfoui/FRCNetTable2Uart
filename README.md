@@ -14,22 +14,31 @@ This project aims to control leds of the [Geekos FRC team](https://frc-events.fi
 
 ## Installation
 
-You can download the .jar file from the [releases](https://github.com/Ferfoui/FRCNetTable2Uart/releases) page.
+You can download a .zip package from the [release page](https://github.com/Ferfoui/FRCNetTable2Uart/releases).
+You only have to unzip it (the zip file), and that's wonderful!
+(You can also download a .jar file from the release page, but you will need to use command line to run it.)
 
 You also need to have wpilib's jdk installed on your computer.
 You can download wpilib from [here](https://docs.wpilib.org/en/stable/docs/zero-to-robot/step-2/wpilib-setup.html).
 It will be installed in `C:\Users\Public\wpilib\2025\jdk` by default on Windows.
 
-## Usage
+## Running the program
+
+You have to be connected to the robot's network to be able to read the NetworkTable
+and to be connected to the Raspberry Pi Pico via USB.
+(It's not mandatory but better if you want to see the leds turning on and off.)
+
+### From zip package
+
+After unzipping the package, you can run the program by double-clicking on the `run.bat` file.
+
+### From .jar file
 
 After installing the .jar file, you can run it with the following command:
 
 ```bash
 C:\Users\Public\wpilib\2025\jdk\bin\java.exe -jar FRCNetTable2Uart-0.1-all.jar
 ```
-
-You also have to be connected to the robot's network to be able to read the NetworkTable
-and to be connected to the Raspberry Pi Pico via USB.
 
 ## NetworkTable2Uart App
 

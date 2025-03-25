@@ -1,4 +1,5 @@
 import edu.wpi.first.tools.WpilibToolsExtension
+import org.gradle.api.tasks.bundling.Zip
 
 plugins {
     kotlin("jvm") version libs.versions.kotlin
@@ -57,12 +58,61 @@ javafx {
 }
 
 application {
-    mainClass.set("fr.ferfoui.nt2u.app.NetworkTable2UartApp")
+    mainClass.set("fr.ferfoui.nt2u.Launcher")
 }
 
 tasks.test {
     useJUnitPlatform()
 }
+
 kotlin {
     jvmToolchain(17)
+}
+
+// Configure the Shadow plugin
+tasks.shadowJar {
+    archiveClassifier.set("all")
+
+    // Ensure JavaFX is properly included
+    mergeServiceFiles()
+
+    manifest {
+        attributes(mapOf(
+            "Main-Class" to "fr.ferfoui.nt2u.Launcher",
+            "Implementation-Title" to project.name,
+            "Implementation-Version" to project.version
+        ))
+    }
+}
+
+
+val outputDir = layout.buildDirectory.dir("libs").get().toString()
+
+val runBashContent = """
+@echo off
+start C:\Users\Public\wpilib\2025\jdk\bin\javaw.exe -jar FRCNetTable2Uart-${project.version}-all.jar
+""".trimIndent()
+val batFileDir = "$outputDir/run.bat"
+
+
+tasks.register("createRunBash") {
+    val runBashFile = file(batFileDir)
+    outputs.file(runBashFile)
+    doLast {
+        runBashFile.writeText(runBashContent)
+    }
+}
+
+tasks.register<Zip>("packageZip") {
+    dependsOn(tasks.shadowJar, "createRunBash")
+    from(tasks.named("shadowJar").get().outputs.files) {
+        rename { "FRCNetTable2Uart-${project.version}-all.jar" }
+    }
+    from(batFileDir)
+    archiveFileName.set("FRCNetTable2Uart-${project.version}.zip")
+    destinationDirectory.set(file(outputDir))
+}
+
+tasks.build {
+    dependsOn("packageZip")
 }
