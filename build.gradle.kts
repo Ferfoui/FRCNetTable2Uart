@@ -69,6 +69,13 @@ kotlin {
     jvmToolchain(17)
 }
 
+
+val outputDir = layout.buildDirectory.dir("libs/v${project.version}").get().toString()
+
+tasks.jar {
+    destinationDirectory.set(file(outputDir))
+}
+
 // Configure the Shadow plugin
 tasks.shadowJar {
     archiveClassifier.set("all")
@@ -83,10 +90,9 @@ tasks.shadowJar {
             "Implementation-Version" to project.version
         ))
     }
+
+    destinationDirectory.set(file(outputDir))
 }
-
-
-val outputDir = layout.buildDirectory.dir("libs").get().toString()
 
 val runBashContent = """
 @echo off
@@ -105,7 +111,7 @@ tasks.register("createRunBash") {
 
 tasks.register<Zip>("packageZip") {
     dependsOn(tasks.shadowJar, "createRunBash")
-    from(tasks.named("shadowJar").get().outputs.files) {
+    from(tasks.shadowJar.get().outputs.files) {
         rename { "FRCNetTable2Uart-${project.version}-all.jar" }
     }
     from(batFileDir)

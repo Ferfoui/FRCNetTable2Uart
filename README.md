@@ -37,7 +37,7 @@ After unzipping the package, you can run the program by double-clicking on the `
 After installing the .jar file, you can run it with the following command:
 
 ```bash
-C:\Users\Public\wpilib\2025\jdk\bin\java.exe -jar FRCNetTable2Uart-0.1-all.jar
+C:\Users\Public\wpilib\2025\jdk\bin\java.exe -jar FRCNetTable2Uart-0.2-all.jar
 ```
 
 ## NetworkTable2Uart App
