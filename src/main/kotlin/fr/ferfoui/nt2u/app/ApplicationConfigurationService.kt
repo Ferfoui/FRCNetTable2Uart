@@ -13,12 +13,12 @@ class ApplicationConfigurationService {
     /**
      * Load the current configuration.
      */
-    fun loadConfiguration(): Map<String, String> {
+    fun loadConfiguration(file: File = configFile): Map<String, String> {
         val config = mutableMapOf<String, String>()
 
-        if (configFile.exists()) {
+        if (file.exists()) {
             val properties = Properties()
-            configFile.inputStream().use { properties.load(it) }
+            file.inputStream().use { properties.load(it) }
 
             for (key in properties.stringPropertyNames()) {
                 config[key] = properties.getProperty(key)

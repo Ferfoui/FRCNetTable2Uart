@@ -20,7 +20,9 @@ import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.control.cell.TextFieldTableCell
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
+import javafx.stage.FileChooser
 import javafx.stage.Stage
+import java.io.File
 
 class AppConfigController {
 
@@ -31,7 +33,7 @@ class AppConfigController {
     @FXML private lateinit var connectButton: Button
     @FXML private lateinit var disconnectButton: Button
     @FXML private lateinit var saveButton: Button
-    @FXML private lateinit var cancelButton: Button
+    @FXML private lateinit var loadButton: Button
     @FXML private lateinit var autoConnectCheckBox: CheckBox
     @FXML private lateinit var ledTableView: TableView<LedConfig>
     @FXML private lateinit var ledNumberColumn: TableColumn<LedConfig, Int>
@@ -373,8 +375,11 @@ class AppConfigController {
     }
 
     @FXML
-    fun onCancel() {
-        closeWindow()
+    fun onLoadFromFile() {
+        val file = FileChooser().showOpenDialog(loadButton.scene.window)
+        if (file != null) {
+            loadConfiguration(file)
+        }
     }
 
     private fun refreshComPorts() {
@@ -390,9 +395,13 @@ class AppConfigController {
         ledsControl = LedsControl(ledManager, ledConfigs)
     }
 
-    private fun loadConfiguration() {
+    private fun loadConfiguration(configFile: File? = null) {
         try {
-            val config = configService.loadConfiguration()
+            val config =
+                if (configFile != null)
+                    configService.loadConfiguration(configFile)
+                else
+                    configService.loadConfiguration()
 
             // Apply loaded configuration to UI
             config["comPort"]?.let { port ->
