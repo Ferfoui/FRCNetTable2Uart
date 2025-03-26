@@ -22,6 +22,7 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
 import javafx.stage.FileChooser
 import javafx.stage.Stage
+import javafx.stage.WindowEvent
 import java.io.File
 
 class AppConfigController {
@@ -318,9 +319,12 @@ class AppConfigController {
         loadLedConfigurations()
     }
 
-    private fun loadLedConfigurations() {
-        ledConfigs.clear()
-        ledConfigs.addAll(configService.loadLedConfigurations())
+
+    @FXML
+    fun onCloseRequest(event: WindowEvent) {
+        if (isConnected.get()) {
+            onDisconnect()
+        }
     }
 
     @FXML
@@ -368,7 +372,7 @@ class AppConfigController {
 
         try {
             configService.saveConfiguration(config)
-            configService.saveLedConfigurations(ledConfigs)
+            configService.saveLedConfigurations(ledConfigs, config)
         } catch (e: Exception) {
             showErrorAlert("Save Error", "Failed to save configuration", e.message ?: "Unknown error")
         }
@@ -379,6 +383,7 @@ class AppConfigController {
         val file = FileChooser().showOpenDialog(loadButton.scene.window)
         if (file != null) {
             loadConfiguration(file)
+            loadLedConfigurations(file)
         }
     }
 
@@ -432,20 +437,23 @@ class AppConfigController {
         }
     }
 
+    private fun loadLedConfigurations(file: File? = null) {
+        ledConfigs.clear()
+        val configs =
+            if (file != null) {
+                configService.loadLedConfigurations(file)
+            } else {
+                configService.loadLedConfigurations()
+            }
+        ledConfigs.addAll(configs)
+    }
+
     private fun showErrorAlert(title: String, header: String, content: String) {
         val alert = Alert(Alert.AlertType.ERROR)
         alert.title = title
         alert.headerText = header
         alert.contentText = content
         alert.showAndWait()
-    }
-
-    private fun closeWindow() {
-        if (isConnected.get()) {
-            onDisconnect()
-        }
-        val stage = saveButton.scene.window as Stage
-        stage.close()
     }
 }
 

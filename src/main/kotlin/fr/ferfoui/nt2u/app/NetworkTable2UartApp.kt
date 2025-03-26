@@ -4,6 +4,7 @@ import fr.ferfoui.nt2u.APP_NAME
 import fr.ferfoui.nt2u.CSS_PATH
 import fr.ferfoui.nt2u.FXML_CONFIG_PATH
 import fr.ferfoui.nt2u.ICON_PATH
+import fr.ferfoui.nt2u.gui.AppConfigController
 import fr.ferfoui.nt2u.networktable.loadNetworkTableLibrairies
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
@@ -32,6 +33,10 @@ class NetworkTable2UartApp : Application() {
                 taskbar.setIconImage(dockIcon);
             }
         }
+
+        // Set on close request
+        val controller = loader.getController<AppConfigController>()
+        stage.setOnCloseRequest(controller::onCloseRequest)
 
         stage.title = APP_NAME
         stage.scene = Scene(root, 800.0, 500.0)

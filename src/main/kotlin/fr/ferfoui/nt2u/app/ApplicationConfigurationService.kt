@@ -46,8 +46,8 @@ class ApplicationConfigurationService {
     /**
      * Save LED configurations.
      */
-    fun saveLedConfigurations(ledConfigs: List<LedConfig>) {
-        val config = loadConfiguration().toMutableMap()
+    fun saveLedConfigurations(ledConfigs: List<LedConfig>, config: Map<String, String>) {
+        val config = config.toMutableMap()
 
         // Clear any existing LED configurations
         val keysToRemove = config.keys.filter { it.startsWith("led.") }
@@ -67,8 +67,8 @@ class ApplicationConfigurationService {
     /**
      * Load LED configurations.
      */
-    fun loadLedConfigurations(): List<LedConfig> {
-        val config = loadConfiguration()
+    fun loadLedConfigurations(file: File = configFile): List<LedConfig> {
+        val config = loadConfiguration(file)
         val ledConfigs = mutableListOf<LedConfig>()
 
         // Default configuration for LEDs 3-10 if not found
