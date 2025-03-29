@@ -1,6 +1,7 @@
 package fr.ferfoui.nt2u.gui
 
 import com.fazecast.jSerialComm.SerialPort
+import fr.ferfoui.nt2u.LED_COUNT
 import fr.ferfoui.nt2u.app.ApplicationConfigurationService
 import fr.ferfoui.nt2u.led.LedManager
 import fr.ferfoui.nt2u.led.LedsControl
@@ -249,7 +250,7 @@ class AppConfigController {
      * Connect the LEDs to the tables using the [LedManager] and [LedsControl] classes.
      */
     private fun connectLedsToTables() {
-        val ledManager = LedManager(serialCommunication, 11)
+        val ledManager = LedManager(serialCommunication, LED_COUNT)
         ledsControl = LedsControl(ledManager, ledConfigs)
     }
 

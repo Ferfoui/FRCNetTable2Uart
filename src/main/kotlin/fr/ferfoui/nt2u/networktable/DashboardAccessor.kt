@@ -8,6 +8,9 @@ import edu.wpi.first.networktables.NetworkTableEvent
 import edu.wpi.first.networktables.NetworkTableInstance
 import edu.wpi.first.networktables.StringSubscriber
 import edu.wpi.first.networktables.Subscriber
+import fr.ferfoui.nt2u.NETWORK_TABLE_USER_NAME
+import fr.ferfoui.nt2u.SMARTDASHBOARD_NAME
+import fr.ferfoui.nt2u.TEAM_NUMBER
 import java.util.*
 
 // To use NetworkTables:
@@ -16,15 +19,15 @@ import java.util.*
 class DashboardAccessor {
 
     private val instance = NetworkTableInstance.getDefault()
-    private val smartDashboardTable: NetworkTable = instance.getTable("SmartDashboard")
+    private val smartDashboardTable: NetworkTable = instance.getTable(SMARTDASHBOARD_NAME)
 
     private val subscribers = mutableMapOf<String, Subscriber>()
 
     private val listenerHandles = mutableListOf<Int>()
 
     init {
-        instance.startClient4("operatorconsole")
-        instance.setServerTeam(9220)
+        instance.startClient4(NETWORK_TABLE_USER_NAME)
+        instance.setServerTeam(TEAM_NUMBER)
         instance.startDSClient()
     }
 
