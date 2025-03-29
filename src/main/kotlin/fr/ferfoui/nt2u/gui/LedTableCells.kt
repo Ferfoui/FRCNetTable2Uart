@@ -7,6 +7,12 @@ import javafx.scene.control.TableCell
 import javafx.scene.control.TableColumn
 import javafx.scene.control.TextField
 
+/**
+ * Custom TableCell for editing the compare value of a LedConfig.
+ * This cell uses a [TextField] for editing the compare value.
+ *
+ * @param compareValueColumn The TableColumn that this cell is associated with.
+ */
 class CompareValueTableCell(compareValueColumn: TableColumn<LedConfig, String>) : TableCell<LedConfig, String>() {
     private val textField = TextField()
 
@@ -32,11 +38,20 @@ class CompareValueTableCell(compareValueColumn: TableColumn<LedConfig, String>) 
         textField.prefWidthProperty().bind(compareValueColumn.widthProperty().subtract(5))
     }
 
+    /**
+     * Validates the input in the text field.
+     * This method checks if the input is valid based on the value type of the LedConfig.
+     *
+     * @return true if the input is valid, false otherwise.
+     */
     private fun validateInput(): Boolean {
         val ledConfig = tableRow.item
         return ledConfig.isValidCompareValue(textField.text)
     }
 
+    /**
+     * Checks if user is allowed to edit the cell when the cell is clicked.
+     */
     override fun startEdit() {
         // Don't allow editing for Boolean type
         val ledConfig = tableRow.item
@@ -54,12 +69,22 @@ class CompareValueTableCell(compareValueColumn: TableColumn<LedConfig, String>) 
         }
     }
 
+    /**
+     * Cancels the edit and resets the text field.
+     */
     override fun cancelEdit() {
         super.cancelEdit()
         text = item
         graphic = null
     }
 
+    /**
+     * Updates the item in the cell.
+     * This method is called when the item in the table changes.
+     *
+     * @param item The new item to display in the cell.
+     * @param empty True if the cell is empty, false otherwise.
+     */
     override fun updateItem(item: String?, empty: Boolean) {
         super.updateItem(item, empty)
 
@@ -67,32 +92,40 @@ class CompareValueTableCell(compareValueColumn: TableColumn<LedConfig, String>) 
             text = null
             graphic = null
             style = ""
+            return
+        }
+
+        if (isEditing) {
+            textField.text = item ?: ""
+            text = null
+            graphic = textField
         } else {
-            if (isEditing) {
-                textField.text = item ?: ""
-                text = null
-                graphic = textField
-            } else {
-                text = item ?: ""
-                graphic = null
+            text = item ?: ""
+            graphic = null
 
-                // Style based on the value type
-                val ledConfig = tableRow?.item
-                if (ledConfig != null) {
-                    style = when (ledConfig.valueType) {
-                        LedConfig.ValueType.BOOLEAN -> {
-                            "-fx-text-fill: gray; -fx-font-style: italic;"
-                        }
+            // Style based on the value type
+            val ledConfig = tableRow?.item
+            if (ledConfig != null) {
+                style = when (ledConfig.valueType) {
+                    LedConfig.ValueType.BOOLEAN -> {
+                        "-fx-text-fill: gray; -fx-font-style: italic;"
+                    }
 
-                        else -> {
-                            ""
-                        }
+                    else -> {
+                        ""
                     }
                 }
             }
         }
+
     }
 
+    /**
+     * Commits the edit and updates the item in the table.
+     * This method is called when the user presses Enter or loses focus.
+     *
+     * @param newValue The new value to set in the table.
+     */
     override fun commitEdit(newValue: String?) {
         // Validate the input before committing
         val ledConfig = tableRow.item
@@ -125,6 +158,11 @@ class CompareValueTableCell(compareValueColumn: TableColumn<LedConfig, String>) 
     }
 }
 
+
+/**
+ * Custom TableCell for editing the condition of a LedConfig.
+ * This cell uses a [ComboBox] for selecting the condition.
+ */
 class ConditionTableCell : TableCell<LedConfig, LedConfig.Condition>() {
     private val comboBox = ComboBox<LedConfig.Condition>()
 
@@ -136,6 +174,9 @@ class ConditionTableCell : TableCell<LedConfig, LedConfig.Condition>() {
         }
     }
 
+    /**
+     * Call this function to transition from a non-editing state into an editing state
+     */
     override fun startEdit() {
         super.startEdit()
         if (!isEmpty) {
@@ -152,12 +193,22 @@ class ConditionTableCell : TableCell<LedConfig, LedConfig.Condition>() {
         }
     }
 
+    /**
+     * Call this function to transition from an editing state into a non-editing state
+     */
     override fun cancelEdit() {
         super.cancelEdit()
         text = item?.toString()
         graphic = null
     }
 
+    /**
+     * Updates the item in the cell.
+     * This method is called when the item in the table changes.
+     *
+     * @param item The new item to display in the cell.
+     * @param empty True if the cell is empty, false otherwise.
+     */
     override fun updateItem(item: LedConfig.Condition?, empty: Boolean) {
         super.updateItem(item, empty)
 

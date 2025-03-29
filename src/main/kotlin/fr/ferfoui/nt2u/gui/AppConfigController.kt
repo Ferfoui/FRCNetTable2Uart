@@ -24,6 +24,10 @@ import javafx.stage.FileChooser
 import javafx.stage.WindowEvent
 import java.io.File
 
+/**
+ * Controller class for the application configuration window.
+ * This class handles the UI interactions and manages the application configuration.
+ */
 class AppConfigController {
 
     @FXML private lateinit var comPortComboBox: ComboBox<String>
@@ -53,6 +57,10 @@ class AppConfigController {
 
     private val serialCommunication = SerialCommunication()
 
+    /**
+     * Initialize the controller after the FXML file has been loaded.
+     * This method is called by the FXMLLoader when the FXML file is loaded.
+     */
     @FXML
     fun initialize() {
         // Initialize ComboBoxes
@@ -89,6 +97,9 @@ class AppConfigController {
         loadConfiguration()
     }
 
+    /**
+     * Initialize the LED table with columns and cell factories.
+     */
     private fun initializeLedTable() {
         // Set up the columns
         ledNumberColumn.cellValueFactory = PropertyValueFactory("ledNumber")
@@ -137,6 +148,10 @@ class AppConfigController {
     }
 
 
+    /**
+     * Handle the close request event for the application window.
+     * This method is called in the application's main class to set the close request action.
+     */
     @FXML
     fun onCloseRequest(event: WindowEvent) {
         if (isConnected.get()) {
@@ -144,11 +159,17 @@ class AppConfigController {
         }
     }
 
+    /**
+     * Handle the refresh button click event to refresh the available COM ports.
+     */
     @FXML
     fun onRefreshComPorts() {
         refreshComPorts()
     }
 
+    /**
+     * Handle the connect button click event to establish a connection to the selected COM port and to smartdashboard.
+     */
     @FXML
     fun onConnect() {
         val selectedPort = comPortComboBox.value
@@ -167,6 +188,9 @@ class AppConfigController {
         }
     }
 
+    /**
+     * Handle the disconnect button click event to close the connection to the COM port and smartdashboard.
+     */
     @FXML
     fun onDisconnect() {
         try {
@@ -179,6 +203,9 @@ class AppConfigController {
         }
     }
 
+    /**
+     * Handle the save button click event to save the current configuration to a file.
+     */
     @FXML
     fun onSave() {
         val config = mapOf(
@@ -195,6 +222,9 @@ class AppConfigController {
         }
     }
 
+    /**
+     * Handle the load button click event to load the configuration from an external file.
+     */
     @FXML
     fun onLoadFromFile() {
         val file = FileChooser().showOpenDialog(loadButton.scene.window)
@@ -204,6 +234,9 @@ class AppConfigController {
         }
     }
 
+    /**
+     * Get the available COM ports from the system.
+     */
     private fun refreshComPorts() {
         val ports = getAvailableComPorts()
         comPortComboBox.items = FXCollections.observableArrayList(ports)
@@ -212,11 +245,20 @@ class AppConfigController {
         }
     }
 
+    /**
+     * Connect the LEDs to the tables using the [LedManager] and [LedsControl] classes.
+     */
     private fun connectLedsToTables() {
         val ledManager = LedManager(serialCommunication, 11)
         ledsControl = LedsControl(ledManager, ledConfigs)
     }
 
+    /**
+     * Load the configuration from a file or the default location.
+     * If a file is provided, it will be used to load the configuration.
+     *
+     * @param configFile The file to load the configuration from. If null, the default location will be used.
+     */
     private fun loadConfiguration(configFile: File? = null) {
         try {
             val config =
@@ -254,6 +296,12 @@ class AppConfigController {
         }
     }
 
+    /**
+     * Load the LED configurations from a file or the default location.
+     * If a file is provided, it will be used to load the configurations.
+     *
+     * @param file The file to load the LED configurations from. If null, the default location will be used.
+     */
     private fun loadLedConfigurations(file: File? = null) {
         ledConfigs.clear()
         val configs =
@@ -265,6 +313,13 @@ class AppConfigController {
         ledConfigs.addAll(configs)
     }
 
+    /**
+     * Show an error alert dialog with the specified title, header, and content.
+     *
+     * @param title The title of the alert dialog.
+     * @param header The header text of the alert dialog.
+     * @param content The content text of the alert dialog.
+     */
     private fun showErrorAlert(title: String, header: String, content: String) {
         val alert = Alert(Alert.AlertType.ERROR)
         alert.title = title
