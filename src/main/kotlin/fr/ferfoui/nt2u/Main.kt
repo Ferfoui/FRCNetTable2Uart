@@ -10,8 +10,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
 fun main() {
-    dashboardTest()
-    //ledsTest()
+    //dashboardTest()
+    ledsTest()
 }
 
 fun ledsTest() {
