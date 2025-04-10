@@ -4,7 +4,7 @@ import com.fazecast.jSerialComm.SerialPort
 import fr.ferfoui.nt2u.led.LedManager
 import fr.ferfoui.nt2u.led.simultaneousTest
 import fr.ferfoui.nt2u.led.testAllLeds
-import fr.ferfoui.nt2u.networktable.DashboardAccessor
+import fr.ferfoui.nt2u.networktable.TableAccessor
 import fr.ferfoui.nt2u.serial.SerialCommunication
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -43,7 +43,7 @@ fun ledsTest() {
 }
 
 fun dashboardTest() {
-    val smartDashboard = DashboardAccessor()
+    val smartDashboard = TableAccessor()
 
     smartDashboard.subscribeTest()
 
