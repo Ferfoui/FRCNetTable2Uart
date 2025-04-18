@@ -44,15 +44,5 @@ class NetworkTable2UartApp : Application() {
         stage.isResizable = true
         stage.show()
     }
-
-    companion object {
-        @JvmStatic
-        fun main(args: Array<String>) {
-            val appClass = NetworkTable2UartApp::class.java
-
-            loadNetworkTableLibrairies(appClass)
-            launch(appClass)
-        }
-    }
 }
 
