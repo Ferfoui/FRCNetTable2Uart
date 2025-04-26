@@ -18,6 +18,9 @@ const val SMARTDASHBOARD_NAME = "SmartDashboard"
 const val NETWORK_TABLE_USER_NAME = "operatorconsole"
 const val TEAM_NUMBER = 9220
 
+const val NET_TABLE_TOPIC_SEPARATOR = '/'
+const val THIRD_NETWORK_TABLE_INDICATOR = "/"
+
 
 // --------------------------------------------------------------
 // LEDs constants

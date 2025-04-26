@@ -1,5 +1,7 @@
 package fr.ferfoui.nt2u.led
 
+import fr.ferfoui.nt2u.NET_TABLE_TOPIC_SEPARATOR
+import fr.ferfoui.nt2u.THIRD_NETWORK_TABLE_INDICATOR
 import fr.ferfoui.nt2u.networktable.TableAccessor
 import fr.ferfoui.nt2u.networktable.initializeNetworkTableInstance
 
@@ -104,8 +106,8 @@ class LedsControl(private val ledManager: LedManager, ledConfigs: List<LedConfig
      * @return The network table accessor.
      */
     private fun identifyNetworkTable(ledConfig: LedConfig): TableAccessor {
-        if (ledConfig.networkTableTopic.startsWith("../")) {
-            val tableName = ledConfig.networkTableTopic.split('/')[1]
+        if (ledConfig.networkTableTopic.startsWith(THIRD_NETWORK_TABLE_INDICATOR)) {
+            val tableName = ledConfig.networkTableTopic.split(NET_TABLE_TOPIC_SEPARATOR)[1]
             return getNetworkTable(tableName)
         }
         return dashboardAccessor
@@ -118,9 +120,14 @@ class LedsControl(private val ledManager: LedManager, ledConfigs: List<LedConfig
      * @return The topic string.
      */
     private fun identifyTopic(ledConfig: LedConfig): String {
-        return if (ledConfig.networkTableTopic.startsWith("../")) {
-            // Remove the first two parts of the topic (../ and table name)
-            ledConfig.networkTableTopic.split('/').drop(2).joinToString("/")
+        return if (ledConfig.networkTableTopic.startsWith(THIRD_NETWORK_TABLE_INDICATOR)) {
+
+            // Remove the first parts of the topic ("INDICATOR" and table name)
+            ledConfig.networkTableTopic
+                .split(NET_TABLE_TOPIC_SEPARATOR)
+                .drop(2)
+                .joinToString(NET_TABLE_TOPIC_SEPARATOR.toString())
+
         } else {
             ledConfig.networkTableTopic
         }
