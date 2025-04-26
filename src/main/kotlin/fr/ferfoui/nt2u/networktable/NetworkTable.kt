@@ -7,7 +7,6 @@ import edu.wpi.first.util.CombinedRuntimeLoader
 import edu.wpi.first.util.WPIUtilJNI
 import fr.ferfoui.nt2u.NETWORK_TABLE_USER_NAME
 import fr.ferfoui.nt2u.TEAM_NUMBER
-import fr.ferfoui.nt2u.app.NetworkTable2UartApp
 
 
 fun loadNetworkTableLibrairies(classToLoad: Class<*>) {

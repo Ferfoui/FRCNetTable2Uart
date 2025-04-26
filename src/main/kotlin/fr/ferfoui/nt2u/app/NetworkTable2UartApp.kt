@@ -5,7 +5,6 @@ import fr.ferfoui.nt2u.CSS_PATH
 import fr.ferfoui.nt2u.FXML_CONFIG_PATH
 import fr.ferfoui.nt2u.ICON_PATH
 import fr.ferfoui.nt2u.gui.AppConfigController
-import fr.ferfoui.nt2u.networktable.loadNetworkTableLibrairies
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
