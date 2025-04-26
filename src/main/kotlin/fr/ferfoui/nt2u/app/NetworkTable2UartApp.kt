@@ -19,19 +19,7 @@ class NetworkTable2UartApp : Application() {
         val loader = FXMLLoader(javaClass.getResource(FXML_CONFIG_PATH))
         val root = loader.load<javafx.scene.Parent>()
 
-        val appIcon = Image(ICON_PATH)
-        stage.icons.add(appIcon)
-
-        // Set icon on the taskbar
-        if (Taskbar.isTaskbarSupported()) {
-            val taskbar = Taskbar.getTaskbar()
-
-            if (taskbar.isSupported(Taskbar.Feature.ICON_IMAGE)) {
-                val defaultToolkit = Toolkit.getDefaultToolkit()
-                val dockIcon = defaultToolkit.getImage(javaClass.getResource(ICON_PATH));
-                taskbar.setIconImage(dockIcon);
-            }
-        }
+        setIcon(stage)
 
         // Set on close request
         val controller = loader.getController<AppConfigController>()
@@ -42,6 +30,22 @@ class NetworkTable2UartApp : Application() {
         stage.scene.stylesheets.add(javaClass.getResource(CSS_PATH)!!.toExternalForm())
         stage.isResizable = true
         stage.show()
+    }
+
+    private fun setIcon(stage: Stage) {
+        val appIcon = Image(ICON_PATH)
+        stage.icons.add(appIcon)
+
+        // Set icon on the taskbar
+        if (Taskbar.isTaskbarSupported()) {
+            val taskbar = Taskbar.getTaskbar()
+
+            if (taskbar.isSupported(Taskbar.Feature.ICON_IMAGE)) {
+                val defaultToolkit = Toolkit.getDefaultToolkit()
+                val dockIcon = defaultToolkit.getImage(javaClass.getResource(ICON_PATH))
+                taskbar.setIconImage(dockIcon)
+            }
+        }
     }
 }
 
