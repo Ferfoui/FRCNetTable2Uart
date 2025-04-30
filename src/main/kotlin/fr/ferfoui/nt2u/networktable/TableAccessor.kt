@@ -14,7 +14,7 @@ import java.util.*
 // To use NetworkTables:
 // https://docs.wpilib.org/en/stable/docs/software/networktables/client-side-program.html
 
-class TableAccessor(private val instance: NetworkTableInstance, tableName: String = SMARTDASHBOARD_NAME) {
+class TableAccessor(private val instance: NetworkTableInstance, val tableName: String = SMARTDASHBOARD_NAME) {
 
     private val networkTable: NetworkTable = instance.getTable(tableName)
 
