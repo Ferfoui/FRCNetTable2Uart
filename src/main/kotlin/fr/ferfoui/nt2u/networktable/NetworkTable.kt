@@ -6,7 +6,10 @@ import edu.wpi.first.networktables.NetworkTablesJNI
 import edu.wpi.first.util.CombinedRuntimeLoader
 import edu.wpi.first.util.WPIUtilJNI
 import fr.ferfoui.nt2u.NETWORK_TABLE_USER_NAME
+import fr.ferfoui.nt2u.NT_CORE_JNI
 import fr.ferfoui.nt2u.TEAM_NUMBER
+import fr.ferfoui.nt2u.WPI_MATH_JNI
+import fr.ferfoui.nt2u.WPI_UTIL_JNI
 
 
 fun loadNetworkTableLibrairies(classToLoad: Class<*>) {
@@ -14,7 +17,7 @@ fun loadNetworkTableLibrairies(classToLoad: Class<*>) {
     WPIUtilJNI.Helper.setExtractOnStaticLoad(false)
     WPIMathJNI.Helper.setExtractOnStaticLoad(false)
     CombinedRuntimeLoader.loadLibraries(
-        classToLoad, "wpiutiljni", "wpimathjni", "ntcorejni"
+        classToLoad, WPI_UTIL_JNI, WPI_MATH_JNI, NT_CORE_JNI
     )
 }
 
