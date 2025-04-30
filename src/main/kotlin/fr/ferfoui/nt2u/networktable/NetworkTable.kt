@@ -11,7 +11,11 @@ import fr.ferfoui.nt2u.TEAM_NUMBER
 import fr.ferfoui.nt2u.WPI_MATH_JNI
 import fr.ferfoui.nt2u.WPI_UTIL_JNI
 
-
+/**
+ * Loads the required wpi libraries for NetworkTables.
+ *
+ * @param classToLoad The class used to load the libraries.
+ */
 fun loadNetworkTableLibrairies(classToLoad: Class<*>) {
     NetworkTablesJNI.Helper.setExtractOnStaticLoad(false)
     WPIUtilJNI.Helper.setExtractOnStaticLoad(false)
@@ -21,6 +25,12 @@ fun loadNetworkTableLibrairies(classToLoad: Class<*>) {
     )
 }
 
+/**
+ * Initializes the NetworkTableInstance with the default settings.
+ * This includes starting the client and setting the server team.
+ *
+ * @return The initialized NetworkTableInstance.
+ */
 fun initializeNetworkTableInstance() : NetworkTableInstance {
     val instance = NetworkTableInstance.getDefault()
 
