@@ -3,9 +3,9 @@ package fr.ferfoui.nt2u.gui
 import com.fazecast.jSerialComm.SerialPort
 import fr.ferfoui.nt2u.LED_COUNT
 import fr.ferfoui.nt2u.app.ApplicationConfigurationService
+import fr.ferfoui.nt2u.led.LedConfig
 import fr.ferfoui.nt2u.led.LedManager
 import fr.ferfoui.nt2u.led.LedsControl
-import fr.ferfoui.nt2u.led.LedConfig
 import fr.ferfoui.nt2u.serial.SerialCommunication
 import fr.ferfoui.nt2u.serial.getAvailableBaudRates
 import fr.ferfoui.nt2u.serial.getAvailableComPorts
@@ -23,6 +23,9 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
 import javafx.stage.FileChooser
 import javafx.stage.WindowEvent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 
 /**
@@ -31,21 +34,38 @@ import java.io.File
  */
 class AppConfigController {
 
-    @FXML private lateinit var comPortComboBox: ComboBox<String>
-    @FXML private lateinit var baudRateComboBox: ComboBox<Int>
-    @FXML private lateinit var connectionStatusCircle: Circle
-    @FXML private lateinit var connectionStatusLabel: Label
-    @FXML private lateinit var connectButton: Button
-    @FXML private lateinit var disconnectButton: Button
-    @FXML private lateinit var saveButton: Button
-    @FXML private lateinit var loadButton: Button
-    @FXML private lateinit var autoConnectCheckBox: CheckBox
-    @FXML private lateinit var ledTableView: TableView<LedConfig>
-    @FXML private lateinit var ledNumberColumn: TableColumn<LedConfig, Int>
-    @FXML private lateinit var topicColumn: TableColumn<LedConfig, String>
-    @FXML private lateinit var valueTypeColumn: TableColumn<LedConfig, LedConfig.ValueType>
-    @FXML private lateinit var conditionColumn: TableColumn<LedConfig, LedConfig.Condition>
-    @FXML private lateinit var compareValueColumn: TableColumn<LedConfig, String>
+    @FXML
+    private lateinit var comPortComboBox: ComboBox<String>
+    @FXML
+    private lateinit var baudRateComboBox: ComboBox<Int>
+    @FXML
+    private lateinit var connectionStatusCircle: Circle
+    @FXML
+    private lateinit var connectionStatusLabel: Label
+    @FXML
+    private lateinit var connectButton: Button
+    @FXML
+    private lateinit var disconnectButton: Button
+    @FXML
+    private lateinit var saveButton: Button
+    @FXML
+    private lateinit var loadButton: Button
+    @FXML
+    private lateinit var autoConnectCheckBox: CheckBox
+    @FXML
+    private lateinit var ledTableView: TableView<LedConfig>
+    @FXML
+    private lateinit var ledNumberColumn: TableColumn<LedConfig, Int>
+    @FXML
+    private lateinit var topicColumn: TableColumn<LedConfig, String>
+    @FXML
+    private lateinit var valueTypeColumn: TableColumn<LedConfig, LedConfig.ValueType>
+    @FXML
+    private lateinit var conditionColumn: TableColumn<LedConfig, LedConfig.Condition>
+    @FXML
+    private lateinit var compareValueColumn: TableColumn<LedConfig, String>
+    @FXML
+    private lateinit var testLedsButton: Button
 
     private lateinit var ledsControl: LedsControl
 
@@ -83,11 +103,13 @@ class AppConfigController {
                 statusText.set("Connected")
                 connectButton.isDisable = true
                 disconnectButton.isDisable = false
+                testLedsButton.isDisable = true
             } else {
                 connectionStatusCircle.fill = Color.RED
                 statusText.set("Not Connected")
                 connectButton.isDisable = false
                 disconnectButton.isDisable = true
+                testLedsButton.isDisable = false
             }
         }
 
@@ -205,6 +227,27 @@ class AppConfigController {
     }
 
     /**
+     * Handle the "Test LEDs" button click event.
+     */
+    @FXML
+    fun onLedTest() {
+        val selectedPort = comPortComboBox.value
+        val baudRate = baudRateComboBox.value
+
+        if (selectedPort != null && baudRate != null) {
+            try {
+                serialCommunication.open(SerialPort.getCommPort(selectedPort), baudRate)
+                testLeds()
+                isConnected.set(true)
+            } catch (e: Exception) {
+                showErrorAlert("Connection Error", "Failed to connect to $selectedPort", e.message ?: "Unknown error")
+            }
+        } else {
+            showErrorAlert("Connection Error", "Invalid Configuration", "Please select a COM port and baud rate.")
+        }
+    }
+
+    /**
      * Handle the save button click event to save the current configuration to a file.
      */
     @FXML
@@ -252,6 +295,20 @@ class AppConfigController {
     private fun connectLedsToTables() {
         val ledManager = LedManager(serialCommunication, LED_COUNT)
         ledsControl = LedsControl(ledManager, ledConfigs)
+    }
+
+    private fun testLeds() {
+        val ledManager = LedManager(serialCommunication, LED_COUNT)
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                ledManager.testAllLeds()
+                ledManager.simultaneousTest()
+            } catch (_: Exception) {
+            } finally {
+                ledManager.close()
+                isConnected.set(false)
+            }
+        }
     }
 
     /**
@@ -329,4 +386,3 @@ class AppConfigController {
         alert.showAndWait()
     }
 }
-

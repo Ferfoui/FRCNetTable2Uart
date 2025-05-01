@@ -2,8 +2,6 @@ package fr.ferfoui.nt2u
 
 import com.fazecast.jSerialComm.SerialPort
 import fr.ferfoui.nt2u.led.LedManager
-import fr.ferfoui.nt2u.led.simultaneousTest
-import fr.ferfoui.nt2u.led.testAllLeds
 import fr.ferfoui.nt2u.networktable.TableSubscriber
 import fr.ferfoui.nt2u.networktable.initializeNetworkTableInstance
 import fr.ferfoui.nt2u.serial.SerialCommunication
@@ -36,10 +34,11 @@ fun ledsTest() {
 
         //println("Setting ON")
         //ledManager.setLedState(4, true)
-
-        testAllLeds(ledManager)
-        simultaneousTest(ledManager)
-        ledManager.stop()
+        runBlocking {
+            ledManager.testAllLeds()
+            ledManager.simultaneousTest()
+        }
+        ledManager.close()
     }
 }
 

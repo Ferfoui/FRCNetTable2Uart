@@ -146,21 +146,13 @@ class LedsControl(private val ledManager: LedManager, ledConfigs: List<LedConfig
         }
     }
 
-    fun testAllLeds() {
-        testAllLeds(ledManager)
-    }
-
-    fun simultaneousTest() {
-        simultaneousTest(ledManager)
-    }
-
     /**
      * Stop the LED control and close all network tables.
      */
     fun stop() {
         dashboardSubscriber.close()
         thirdNetworkTables.values.forEach { it.close() }
-        ledManager.stop()
+        ledManager.close()
     }
 
 

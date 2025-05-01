@@ -83,6 +83,9 @@
                         styleClass="action-button"/>
                 <Button fx:id="disconnectButton" text="Disconnect" onAction="#onDisconnect"
                         styleClass="action-button"/>
+                <Pane HBox.hgrow="ALWAYS"/> <!-- Spacer to push the button to the far right -->
+                <Button fx:id="testLedsButton" text="Test LEDs" onAction="#onLedTest"
+                        styleClass="action-button"/>
             </HBox>
 
             <columnConstraints>
@@ -103,4 +106,3 @@
     </bottom>
 
 </BorderPane>
-
