@@ -297,6 +297,9 @@ class AppConfigController {
         ledsControl = LedsControl(ledManager, ledConfigs)
     }
 
+    /**
+     * Test all LEDs by turning them on and off sequentially.
+     */
     private fun testLeds() {
         val ledManager = LedManager(serialCommunication, LED_COUNT)
         CoroutineScope(Dispatchers.IO).launch {
