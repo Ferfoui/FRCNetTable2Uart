@@ -1,8 +1,9 @@
 package fr.ferfoui.nt2u.led
 
 import fr.ferfoui.nt2u.NET_TABLE_TOPIC_SEPARATOR
+import fr.ferfoui.nt2u.SMARTDASHBOARD_NAME
 import fr.ferfoui.nt2u.THIRD_NETWORK_TABLE_INDICATOR
-import fr.ferfoui.nt2u.networktable.TableAccessor
+import fr.ferfoui.nt2u.networktable.TableSubscriber
 import fr.ferfoui.nt2u.networktable.initializeNetworkTableInstance
 
 /**
@@ -14,8 +15,8 @@ import fr.ferfoui.nt2u.networktable.initializeNetworkTableInstance
 class LedsControl(private val ledManager: LedManager, ledConfigs: List<LedConfig>) {
 
     private val instance = initializeNetworkTableInstance()
-    private val dashboardAccessor: TableAccessor = TableAccessor(instance)
-    private val thirdNetworkTables = mutableMapOf<String, TableAccessor>()
+    private val dashboardSubscriber: TableSubscriber = TableSubscriber(instance, SMARTDASHBOARD_NAME)
+    private val thirdNetworkTables = mutableMapOf<String, TableSubscriber>()
 
     init {
         ledConfigs.filter { it.networkTableTopic.isNotEmpty() }
@@ -93,7 +94,7 @@ class LedsControl(private val ledManager: LedManager, ledConfigs: List<LedConfig
      * @param ledConfig The LED configuration to identify.
      * @return A pair containing the network table and topic.
      */
-    private fun identifyNetworkTableAndTopic(ledConfig: LedConfig): Pair<TableAccessor, String> {
+    private fun identifyNetworkTableAndTopic(ledConfig: LedConfig): Pair<TableSubscriber, String> {
         val networkTable = identifyNetworkTable(ledConfig)
         val topic = identifyTopic(ledConfig)
         return Pair(networkTable, topic)
@@ -105,12 +106,12 @@ class LedsControl(private val ledManager: LedManager, ledConfigs: List<LedConfig
      * @param ledConfig The LED configuration to identify.
      * @return The network table accessor.
      */
-    private fun identifyNetworkTable(ledConfig: LedConfig): TableAccessor {
+    private fun identifyNetworkTable(ledConfig: LedConfig): TableSubscriber {
         if (ledConfig.networkTableTopic.startsWith(THIRD_NETWORK_TABLE_INDICATOR)) {
             val tableName = ledConfig.networkTableTopic.split(NET_TABLE_TOPIC_SEPARATOR)[1]
             return getNetworkTable(tableName)
         }
-        return dashboardAccessor
+        return dashboardSubscriber
     }
 
     /**
@@ -139,9 +140,9 @@ class LedsControl(private val ledManager: LedManager, ledConfigs: List<LedConfig
      * @param tableName The name of the network table.
      * @return The network table accessor.
      */
-    private fun getNetworkTable(tableName: String): TableAccessor {
+    private fun getNetworkTable(tableName: String): TableSubscriber {
         return thirdNetworkTables.getOrPut(tableName) {
-            TableAccessor(initializeNetworkTableInstance(), tableName)
+            TableSubscriber(initializeNetworkTableInstance(), tableName)
         }
     }
 
@@ -157,7 +158,7 @@ class LedsControl(private val ledManager: LedManager, ledConfigs: List<LedConfig
      * Stop the LED control and close all network tables.
      */
     fun stop() {
-        dashboardAccessor.close()
+        dashboardSubscriber.close()
         thirdNetworkTables.values.forEach { it.close() }
         ledManager.stop()
     }

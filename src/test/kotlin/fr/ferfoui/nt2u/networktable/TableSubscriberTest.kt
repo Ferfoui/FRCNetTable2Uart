@@ -10,16 +10,16 @@ const val NETWORK_TABLE_NAME = "test"
 const val CLIENT_TABLE_NAME = "test client"
 const val TEAM_NUMBER = 9220
 
-class TableAccessorTest {
+class TableSubscriberTest {
 
     init {
-        loadNetworkTableLibrairies(TableAccessorTest::class.java)
+        loadNetworkTableLibrairies(TableSubscriberTest::class.java)
     }
 
     private lateinit var networkTableInstance: NetworkTableInstance
 
     private lateinit var serverNetworkTable: NetworkTable
-    private lateinit var tableAccessor: TableAccessor
+    private lateinit var tableSubscriber: TableSubscriber
 
     @BeforeEach
     fun setUp() {
@@ -33,13 +33,13 @@ class TableAccessorTest {
 
         networkTableInstance.startClient4(CLIENT_TABLE_NAME)
         networkTableInstance.startDSClient()
-        tableAccessor = TableAccessor(networkTableInstance, NETWORK_TABLE_NAME)
+        tableSubscriber = TableSubscriber(networkTableInstance, NETWORK_TABLE_NAME)
         println("test : NTClient started")
     }
 
     @AfterEach
     fun tearDown() {
-        tableAccessor.close()
+        tableSubscriber.close()
         networkTableInstance.stopClient()
         networkTableInstance.stopServer()
         println("test : Server and client stopped")
@@ -55,7 +55,7 @@ class TableAccessorTest {
 
         // Subscribe to the topic
         var obtainedValue: String? = null
-        tableAccessor.subscribeToString(topic) { value ->
+        tableSubscriber.subscribeToString(topic) { value ->
             obtainedValue = value
         }
 
@@ -80,7 +80,7 @@ class TableAccessorTest {
 
         // Subscribe to the topic
         var obtainedValue: Boolean? = null
-        tableAccessor.subscribeToBoolean(topic) { value ->
+        tableSubscriber.subscribeToBoolean(topic) { value ->
             obtainedValue = value
         }
 
@@ -105,7 +105,7 @@ class TableAccessorTest {
 
         // Subscribe to the topic
         var obtainedValue: Int? = null
-        tableAccessor.subscribeToInteger(topic) { value ->
+        tableSubscriber.subscribeToInteger(topic) { value ->
             obtainedValue = value
         }
 
@@ -130,7 +130,7 @@ class TableAccessorTest {
 
         // Subscribe to the topic
         var obtainedValue: Double? = null
-        tableAccessor.subscribeToDouble(topic) { value ->
+        tableSubscriber.subscribeToDouble(topic) { value ->
             obtainedValue = value
         }
 

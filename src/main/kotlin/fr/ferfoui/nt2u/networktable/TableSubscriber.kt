@@ -1,30 +1,37 @@
 package fr.ferfoui.nt2u.networktable
 
-import edu.wpi.first.networktables.BooleanSubscriber
-import edu.wpi.first.networktables.DoubleSubscriber
-import edu.wpi.first.networktables.IntegerSubscriber
-import edu.wpi.first.networktables.NetworkTable
-import edu.wpi.first.networktables.NetworkTableEvent
-import edu.wpi.first.networktables.NetworkTableInstance
-import edu.wpi.first.networktables.StringSubscriber
-import edu.wpi.first.networktables.Subscriber
-import fr.ferfoui.nt2u.SMARTDASHBOARD_NAME
+import edu.wpi.first.networktables.*
 import java.util.*
 
 // To use NetworkTables:
 // https://docs.wpilib.org/en/stable/docs/software/networktables/client-side-program.html
 
-class TableAccessor(private val instance: NetworkTableInstance, val tableName: String = SMARTDASHBOARD_NAME) {
+/**
+ * Class to access a NetworkTable and subscribe to its topics.
+ *
+ * @param instance The [NetworkTableInstance] to use.
+ * @param tableName The name of the table to access.
+ */
+class TableSubscriber(private val instance: NetworkTableInstance, val tableName: String) {
 
     private val networkTable: NetworkTable = instance.getTable(tableName)
 
     private val subscribers = mutableMapOf<String, Subscriber>()
     private val listenerHandles = mutableListOf<Int>()
 
+    /**
+     * Subscribe to a [String] topic with a callback.
+     *
+     * The callback will be called when the value changes and when the subscription is created.
+     *
+     * @param topic The topic to subscribe to.
+     * @param callback The callback to call when the value changes.
+     */
     fun subscribeToString(topic: String, callback: (String) -> Unit) {
         val subscriber = networkTable.getStringTopic(topic).subscribe("")
 
-        val listenerHandle = instance.addListener(subscriber,
+        val listenerHandle = instance.addListener(
+            subscriber,
             EnumSet.of(NetworkTableEvent.Kind.kValueAll)
         ) { _ ->
             callback((subscribers[topic] as StringSubscriber).get())
@@ -36,6 +43,14 @@ class TableAccessor(private val instance: NetworkTableInstance, val tableName: S
         listenerHandles.add(listenerHandle)
     }
 
+    /**
+     * Subscribe to a boolean topic with a callback.
+     *
+     * The callback will be called when the value changes and when the subscription is created.
+     *
+     * @param topic The topic to subscribe to.
+     * @param callback The callback to call when the value changes.
+     */
     fun subscribeToBoolean(topic: String, callback: (Boolean) -> Unit) {
         val subscriber = networkTable.getBooleanTopic(topic).subscribe(false)
 
@@ -51,6 +66,14 @@ class TableAccessor(private val instance: NetworkTableInstance, val tableName: S
         listenerHandles.add(listenerHandle)
     }
 
+    /**
+     * Subscribe to an integer topic with a callback.
+     *
+     * The callback will be called when the value changes and when the subscription is created.
+     *
+     * @param topic The topic to subscribe to.
+     * @param callback The callback to call when the value changes.
+     */
     fun subscribeToInteger(topic: String, callback: (Int) -> Unit) {
         val subscriber = networkTable.getIntegerTopic(topic).subscribe(0)
 
@@ -66,6 +89,14 @@ class TableAccessor(private val instance: NetworkTableInstance, val tableName: S
         listenerHandles.add(listenerHandle)
     }
 
+    /**
+     * Subscribe to a double topic with a callback.
+     *
+     * The callback will be called when the value changes and when the subscription is created.
+     *
+     * @param topic The topic to subscribe to.
+     * @param callback The callback to call when the value changes.
+     */
     fun subscribeToDouble(topic: String, callback: (Double) -> Unit) {
         val subscriber = networkTable.getDoubleTopic(topic).subscribe(0.0)
 
@@ -81,6 +112,7 @@ class TableAccessor(private val instance: NetworkTableInstance, val tableName: S
         listenerHandles.add(listenerHandle)
     }
 
+    // TODO: Remove this method
     fun subscribeTest() {
         val hello = networkTable.getStringTopic("hello").subscribe("default")
         while (true) {
@@ -94,6 +126,9 @@ class TableAccessor(private val instance: NetworkTableInstance, val tableName: S
         }
     }
 
+    /**
+     * Close all listeners and stop the client.
+     */
     fun close() {
         listenerHandles.forEach { instance.removeListener(it) }
         instance.stopClient()

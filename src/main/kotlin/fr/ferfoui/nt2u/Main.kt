@@ -4,7 +4,7 @@ import com.fazecast.jSerialComm.SerialPort
 import fr.ferfoui.nt2u.led.LedManager
 import fr.ferfoui.nt2u.led.simultaneousTest
 import fr.ferfoui.nt2u.led.testAllLeds
-import fr.ferfoui.nt2u.networktable.TableAccessor
+import fr.ferfoui.nt2u.networktable.TableSubscriber
 import fr.ferfoui.nt2u.networktable.initializeNetworkTableInstance
 import fr.ferfoui.nt2u.serial.SerialCommunication
 import kotlinx.coroutines.delay
@@ -44,7 +44,7 @@ fun ledsTest() {
 }
 
 fun dashboardTest() {
-    val smartDashboard = TableAccessor(initializeNetworkTableInstance())
+    val smartDashboard = TableSubscriber(initializeNetworkTableInstance(), SMARTDASHBOARD_NAME)
 
     smartDashboard.subscribeTest()
 
